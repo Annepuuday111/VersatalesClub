@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Members</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230412/pngtree-clouds-sky-cartoon-creative-illustration-cute-sky-background-image_2204268.jpg');
+            margin: 0;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            flex-direction: column;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            width: 100%;
+            z-index: 1;
+            box-sizing: border-box;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        .team h1 {
+            margin-bottom: 25px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        .team-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+        .team-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .team-card h2 {
+            margin: 0;
+            margin-top: 2px;
+            padding: 15px;
+            font-size: 1.25rem;
+            color: #333;
+            background: #f4f4f4;
+        }
+        .team-card p {
+            padding: 0 15px;
+            color: #666;
+            font-size: 1rem;
+            background: #fff;
+        }
+        .team-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        .footer {
+            width: 100%;
+            background-color: rgba(27, 26, 26, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .footer-item {
+            margin: 0 10px;
+            font-size: 24px;
+            color: white;
+            text-decoration: none;
+            position: relative;
+        }
+        .footer-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            height: 20px;
+            width: 1px;
+            background-color: white;
+            transform: translateY(-50%);
+        }
+        .footer-item:last-child::after {
+            display: none;
+        }
+        .footer-item:hover {
+            color: #d3d3d3;
+        }
+        @media (max-width: 600px) {
+            .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-item {
+                font-size: 20px;
+                margin: 0 5px;
+            }
+            .team-members {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <h1>Our Team</h1>
+    <div class="team">
+        <div class="team-members">
+            {% for member in team_members %}
+                <div class="team-card">
+                    <img src="{{ member.profile_picture.url }}" alt="Profile Picture of {{ member.name }}">
+                    <h2>{{ member.name }}</h2>
+                    <p>{{ member.position }}</p>
+                </div>
+            {% empty %}
+                <p>No team members available.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="footer">
+        <a href="{% url 'index' %}" class="footer-item">
+            <i class="fas fa-home"></i>
+        </a>
+        <a href="{% url 'about' %}" class="footer-item">
+            <i class="fas fa-info-circle"></i>
+        </a>
+        <a href="{% url 'gallery' %}" class="footer-item">
+            <i class="fas fa-images"></i>
+        </a>
+        <a href="{% url 'contact' %}" class="footer-item">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="{% url 'teammembers' %}" class="footer-item">
+            <i class="fas fa-users"></i>
+        </a>
+    </div>
+</body>
+</html>

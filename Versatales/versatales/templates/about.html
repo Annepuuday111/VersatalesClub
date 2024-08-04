@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230412/pngtree-clouds-sky-cartoon-creative-illustration-cute-sky-background-image_2204268.jpg');
+            margin: 0;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            flex-direction: column;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+        .container {
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            display: flex;
+            overflow: hidden;
+            margin-top: -50px;
+            max-width: 900px;
+            width: 100%;
+            z-index: 1;
+        }
+        #aboutContent {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 40px;
+            width: 50%;
+        }
+        #aboutContent p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .form-image {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .form-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 0 10px 10px 0;
+            object-fit: cover;
+        }
+        .social-media {
+            display: flex;
+            justify-content: center;
+            margin-top: -25px;
+        }
+        .social-media a {
+            margin: 0 5px;
+            font-size: 30px;
+            text-decoration: none;
+        }
+        .social-media a:hover {
+            color: #d3d3d3;
+        }
+        .social-media a .fab {
+            color: #4267B2; /* Default color for social media icons */
+        }
+        .social-media a.mail .fas {
+            color: #D44638;
+        }
+        .social-media a.youtube .fab {
+            color: #FF0000;
+        }
+        .social-media a.instagram .fab {
+            color: #c32aa3;
+        }
+        .social-media a.linkedin .fab {
+            color: #0077b5;
+        }
+        .footer {
+            width: 100%;
+            background-color: rgba(27, 26, 26, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .footer-item {
+            margin: 0 10px;
+            font-size: 24px;
+            color: white;
+            text-decoration: none;
+            position: relative;
+        }
+        .footer-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            height: 20px;
+            width: 1px;
+            background-color: white;
+            transform: translateY(-50%);
+        }
+        .footer-item:last-child::after {
+            display: none;
+        }
+        .footer-item:hover {
+            color: #d3d3d3;
+        }
+        .read-more {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: orange;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .read-more:hover {
+            background-color: darkorange;
+        }
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+            #aboutContent, .form-image {
+                width: 100%;
+            }
+            .form-image img {
+                border-radius: 0 0 10px 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-item {
+                font-size: 20px;
+                margin: 0 5px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div id="aboutContent">
+            <div style="display: flex; align-items: center; width: 100%; justify-content: center;">
+                <img src="{% static 'images/versatales.png' %}" alt="Logo" style="max-width: 40px; margin-right: 10px;">
+                <h2>About Us</h2>
+            </div>
+            <p>Welcome to VERSATALES, where storytelling meets creativity! As a Script Writing Club, we offer opportunities for members to explore scriptwriting, podcasting, and interviewing. Our flexible environment welcomes all skill levels and encourages creative expression. With diverse projects and inclusive scheduling, we empower members to pursue their storytelling passions. <a href="{% url 'signup' %}" style="color: blue; text-decoration: underline;">Join us in crafting compelling narratives and unlocking your creative potential!</a></p>
+            <p>Our mission is to deliver high-quality solutions that meet the needs of our clients. We believe in innovation, integrity, and customer satisfaction.<br>Thank you for choosing us...!</p>
+            <a href="{% url 'knowmore' %}" class="read-more">Read More</a>
+        </div>
+        <div class="form-image">
+            <img src="https://img.freepik.com/free-vector/about-us-concept-illustration_114360-669.jpg?w=996" alt="About Us">
+            <br>
+            <div class="social-media">
+                <a href="mailto:MAIL : versatalesclub@gmail.com" class="mail" target="_blank"><i class="fas fa-envelope"></i></a>
+                <a href="https://www.linkedin.com/in/versatales-club-klsac/" class="linkedin" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.youtube.com/@KL_VERSATALES" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.instagram.com/klsac_versatales?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="{% url 'index' %}" class="footer-item">
+            <i class="fas fa-home"></i>
+        </a>
+        <a href="{% url 'about' %}" class="footer-item">
+            <i class="fas fa-info-circle"></i>
+        </a>
+        <a href="{% url 'gallery' %}" class="footer-item">
+            <i class="fas fa-images"></i>
+        </a>
+        <a href="{% url 'contact' %}" class="footer-item">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="{% url 'teammembers' %}" class="footer-item">
+            <i class="fas fa-users"></i>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Know More</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230412/pngtree-clouds-sky-cartoon-creative-illustration-cute-sky-background-image_2204268.jpg');
+            margin: 0;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            flex-direction: column;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+        .container {
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            display: flex;
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            z-index: 1;
+            margin: 20px auto;
+            margin-bottom: 150px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #knowMoreContent {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 60%;
+            overflow-y: auto;
+            max-height: calc(100vh - 100px);
+        }
+        #knowMoreContent > div {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        #knowMoreContent h2 {
+            margin: 0;
+            font-size: 24px;
+            margin-left: 10px;
+        }
+        #knowMoreContent p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .form-image {
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .form-image img {
+            width: 70%;
+            height: auto;
+            border-radius: 0 10px 10px 0;
+            object-fit: cover;
+        }
+        .social-media {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .social-media a {
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+        }
+        .social-media a:hover {
+            color: #d3d3d3;
+        }
+        .social-media a .fab {
+            color: #4267B2;
+        }
+        .social-media a.mail .fas {
+            color: #D44638;
+        }
+        .social-media a.youtube .fab {
+            color: #FF0000;
+        }
+        .social-media a.instagram .fab {
+            color: #c32aa3;
+        }
+        .social-media a.linkedin .fab {
+            color: #0077b5;
+        }
+        .footer {
+            width: 100%;
+            background-color: green;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        .footer-item {
+            margin: 0 10px;
+            font-size: 24px;
+            color: white;
+            text-decoration: none;
+            position: relative;
+        }
+        .footer-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            height: 20px;
+            width: 1px;
+            background-color: white;
+            transform: translateY(-50%);
+        }
+        .footer-item:last-child::after {
+            display: none;
+        }
+        .footer-item:hover {
+            color: #d3d3d3;
+        }
+        .read-more {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: orange;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .read-more:hover {
+            background-color: darkorange;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin-bottom: 90px;
+            }
+            #knowMoreContent, .form-image {
+                width: 100%;
+            }
+            .form-image img {
+                border-radius: 0 0 10px 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-item {
+                font-size: 20px;
+                margin: 0 5px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div id="knowMoreContent">
+<!--            <div>-->
+<!--                <img src="{% static 'images/versatales.png' %}" alt="Logo" style="max-width: 30px;margin-left: 40%;">-->
+<!--                <h2>Know More</h2>-->
+<!--            </div>-->
+            <p>Welcome to VERSATALES, your gateway to the world of storytelling and creativity! As a dynamic Script Writing Club, we're dedicated to nurturing the talents of aspiring writers and storytellers. But we're not just about scripts – we're a hub for all forms of narrative expression. From crafting captivating podcasts to conducting insightful interviews, our club offers a diverse range of opportunities for members to explore and showcase their creative talents.</p>
+            <p>At VERSATALES, we understand that every member brings a unique perspective and set of skills to the table. That's why we provide a flexible and inclusive environment where creativity knows no bounds. Whether you're a seasoned wordsmith or just starting your journey as a storyteller, there's a place for you here.</p>
+            <p>Our club embraces flexibility in many ways. Firstly, we offer a variety of activities and projects to cater to different interests and skill levels. Whether you're passionate about scriptwriting, podcasting, or interviewing, you'll find opportunities to get involved and grow your talents. Additionally, we encourage members to explore their creativity and take ownership of their projects. Want to experiment with a new writing style or explore a different genre? Go for it! We're here to support and empower you every step of the way.</p>
+            <p>In addition to providing creative outlets, we also prioritize flexibility in scheduling and participation. We understand that members have busy lives outside of the club, so we strive to accommodate varying schedules and commitments. Whether you can only participate in events occasionally or you're able to fully immerse yourself in club activities, you're welcome here.</p>
+            <p>At VERSATALES, we believe that everyone has a story to tell, and we're here to help you bring yours to life. Join us on our journey of creativity, exploration, and storytelling excellence.</p>
+        </div>
+        <div class="form-image">
+            <img src="{% static 'images/versatales.png' %}" alt="Know More">
+            <div class="social-media">
+                <a href="mailto:versatalesclub@gmail.com" class="mail" target="_blank"><i class="fas fa-envelope"></i></a>
+                <a href="https://www.linkedin.com/in/versatales-club-klsac/" class="linkedin" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.youtube.com/@KL_VERSATALES" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.instagram.com/klsac_versatales?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="{% url 'index' %}" class="footer-item">
+            <i class="fas fa-home"></i>
+        </a>
+        <a href="{% url 'about' %}" class="footer-item">
+            <i class="fas fa-info-circle"></i>
+        </a>
+        <a href="{% url 'gallery' %}" class="footer-item">
+            <i class="fas fa-images"></i>
+        </a>
+        <a href="{% url 'contact' %}" class="footer-item">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="{% url 'teammembers' %}" class="footer-item">
+            <i class="fas fa-users"></i>
+        </a>
+    </div>
+</body>
+</html>

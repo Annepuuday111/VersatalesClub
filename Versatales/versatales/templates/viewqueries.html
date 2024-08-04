@@ -1,0 +1,109 @@
+{% extends 'baseadmin.html' %}
+{% block title %}View Queries{% endblock %}
+{% block content %}
+<style>
+    .page-heading {
+        text-align: center;
+        font-size: 1.5em;
+        color: #444;
+        margin-bottom: 20px;
+        font-family: 'Arial', sans-serif;
+        font-weight: 600;
+    }
+
+    .queries-table {
+        width: 80%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+
+    .queries-table th,
+    .queries-table td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid black;
+        border-bottom: 1px solid #ddd;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .queries-table thead {
+        background-color: #f4f4f4;
+    }
+
+    .queries-table th {
+        background-color: lightblue;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .queries-table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .queries-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .file-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .file-link:hover {
+        text-decoration: underline;
+    }
+
+    .no-results {
+        text-align: center;
+        font-size: 1.2em;
+        color: #666;
+        font-family: 'Arial', sans-serif;
+    }
+
+    @media (max-width: 600px) {
+        .queries-table {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .queries-table th,
+        .queries-table td {
+            padding: 8px;
+        }
+    }
+</style>
+    <h2 class="page-heading">User Queries</h2>
+    {% if submissions %}
+        <table class="queries-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>File</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for query in submissions %}
+                    <tr>
+                        <td>{{ query.name }}</td>
+                        <td>{{ query.email }}</td>
+                        <td>
+                            {% if query.choosefile %}
+                                <a href="{{ query.choosefile.url }}" target="_blank" class="file-link">View File</a>
+                            {% else %}
+                                No file uploaded
+                            {% endif %}
+                        </td>
+                        <td>{{ query.message }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-results">No queries found.</p>
+    {% endif %}
+{% endblock %}
+
+

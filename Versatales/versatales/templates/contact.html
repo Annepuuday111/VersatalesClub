@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talk to Us</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230412/pngtree-clouds-sky-cartoon-creative-illustration-cute-sky-background-image_2204268.jpg');
+            margin: 0;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            flex-direction: column;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+        .container {
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            display: flex;
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            z-index: 1;
+        }
+        #signupForm {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 40px;
+            width: 50%;
+        }
+        #signupForm input, #signupForm textarea, #signupForm button {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #signupForm button {
+            background-color: orange;
+            color: white;
+            border: none;
+            cursor: pointer;
+            align-self: center;
+            width: auto;
+            padding: 10px 20px;
+        }
+        #signupForm button:hover {
+            background-color: darkorange;
+        }
+        .form-image {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .form-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 0 10px 10px 0;
+            object-fit: cover;
+        }
+        .social-media {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .social-media a {
+            margin: 0 5px;
+            font-size: 30px;
+            text-decoration: none;
+        }
+        .social-media a:hover {
+            color: #d3d3d3;
+        }
+        .social-media a .fab {
+            color: #4267B2;
+        }
+        .social-media a.facebook .fab {
+            color: #3b5998;
+        }
+        .social-media a.twitter .fab {
+            color: #1da1f2;
+        }
+        .social-media a.instagram .fab {
+            color: #c32aa3;
+        }
+        .social-media a.linkedin .fab {
+            color: #0077b5;
+        }
+        .footer {
+            width: 100%;
+            background-color: rgba(27, 26, 26, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .footer-item {
+            margin: 0 10px;
+            font-size: 24px;
+            color: white;
+            text-decoration: none;
+            position: relative;
+        }
+        .footer-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            height: 20px;
+            width: 1px;
+            background-color: white;
+            transform: translateY(-50%);
+        }
+        .footer-item:last-child::after {
+            display: none;
+        }
+        .footer-item:hover {
+            color: #d3d3d3;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+            }
+            #signupForm, .form-image {
+                width: 100%;
+            }
+            .form-image img {
+                border-radius: 0 0 10px 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-item {
+                font-size: 20px;
+                margin: 0 5px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <form id="signupForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div style="display: flex; align-items: center; width: 100%; justify-content: center;">
+                <img src="{% static 'images/versatales.png' %}" alt="Logo" style="max-width: 40px; margin-right: 10px;">
+                <h2>Talk to Us</h2>
+            </div>
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message {{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{ form.non_field_errors }}
+            <input type="text" id="name" name="name" placeholder="Name" value="{{ form.name.value|default:'' }}" required>
+            {{ form.email.errors }}
+            <input type="email" id="email" name="email" placeholder="Email" value="{{ form.email.value|default:'' }}" required>
+            {{ form.choosefile.errors }}
+            <input type="file" id="choosefile" name="choosefile" required>
+            {{ form.message.errors }}
+            <textarea id="message" name="message" placeholder="Message" rows="4" required>{{ form.message.value|default:'' }}</textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <div class="form-image">
+            <img src="https://img.freepik.com/free-vector/customer-support-flat-design-illustration_23-2148889374.jpg?t=st=1722128488~exp=1722132088~hmac=56e18bea987dcea6305bd370563792d30ebfa99010c86cf52f9aea50d98ea308&w=996" alt="Customer Support">
+            <div class="social-media">
+                <a href="https://facebook.com" class="facebook" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://twitter.com" class="twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://instagram.com" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com" class="linkedin" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="{% url 'index' %}" class="footer-item">
+            <i class="fas fa-home"></i>
+        </a>
+        <a href="{% url 'about' %}" class="footer-item">
+            <i class="fas fa-info-circle"></i>
+        </a>
+        <a href="{% url 'gallery' %}" class="footer-item">
+            <i class="fas fa-images"></i>
+        </a>
+        <a href="{% url 'contact' %}" class="footer-item">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="{% url 'teammembers' %}" class="footer-item">
+            <i class="fas fa-users"></i>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}User Home{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20230412/pngtree-clouds-sky-cartoon-creative-illustration-cute-sky-background-image_2204268.jpg');
+            margin: 0;
+            background-size: cover;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 220px;
+            background-color: rgba(27, 26, 26, 0.8);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        .dashboard-image {
+            max-width: 35%;
+            height: auto;
+            display: block;
+            margin: 0 auto 3px;
+        }
+        .sidebar-item {
+            width: 100%;
+            margin: 10px 0;
+            text-align: left;
+            font-size: 18px;
+            color: white;
+            text-decoration: none;
+            padding: 6px;
+            transition: background-color 0.1s ease;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        .sidebar-item .icon {
+            margin-right: 10px;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            overflow-y: auto;
+        }
+        .footer {
+            width: 100%;
+            background-color: rgba(27, 26, 26, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px 0;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+            .sidebar-item {
+                margin: 5px 0;
+                font-size: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            .sidebar-item {
+                font-size: 14px;
+                padding: 5px;
+            }
+            .footer-item {
+                font-size: 20px;
+                margin: 0 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="sidebar">
+            <h2><u>User Dashboard</u></h2>
+            <br>
+            <a href="{% url 'home' %}" class="sidebar-item">
+                <i class="fas fa-user icon"></i> Profile
+            </a>
+            <a href="{% url 'viewevents' %}" class="sidebar-item">
+                <i class="fas fa-briefcase icon"></i> Events
+            </a>
+            <a href="{% url 'logout' %}" class="sidebar-item">
+                <i class="fas fa-sign-out-alt icon"></i> Logout
+            </a>
+        </div>
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; Copyright 2024 by VersatalesClub. All Rights Reserved</p>
+    </div>
+</body>
+</html>

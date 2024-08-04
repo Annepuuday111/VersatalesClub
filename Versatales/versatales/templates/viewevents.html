@@ -1,0 +1,75 @@
+{% extends 'basehome.html' %}
+{% block title %}View Events{% endblock %}
+{% block content %}
+<style>
+    .event-table {
+        width: 80%;
+        margin: 0 auto;
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+
+    .event-table th,
+    .event-table td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid black;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .event-table thead {
+        background-color: #f4f4f4;
+    }
+
+    .event-table th {
+        background-color: lightblue;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .event-table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .event-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    @media (max-width: 600px) {
+        .event-table {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .event-table th,
+        .event-table td {
+            padding: 8px;
+        }
+    }
+</style>
+    <h2 align="center">Events</h2>
+    {% if events %}
+        <table class="event-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.title }}</td>
+                        <td>{{ event.date }}</td>
+                        <td>{{ event.location }}</td>
+                        <td>{{ event.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p align="center">No events found.</p>
+    {% endif %}
+{% endblock %}
