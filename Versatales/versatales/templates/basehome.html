@@ -30,6 +30,7 @@
             flex-direction: column;
             align-items: flex-start;
             padding: 20px;
+            position: relative;
         }
         .dashboard-image {
             max-width: 35%;
@@ -48,12 +49,34 @@
             transition: background-color 0.1s ease;
             display: flex;
             align-items: center;
+            position: relative;
         }
         .sidebar-item:hover {
             background-color: rgba(255, 255, 255, 0.3);
         }
         .sidebar-item .icon {
             margin-right: 10px;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            z-index: 1000;
+            width: 100%;
+        }
+        .dropdown-item {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+            font-size: 16px;
+        }
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
         }
         .main-content {
             flex: 1;
@@ -68,6 +91,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 10px 0;
         }
         @media (max-width: 768px) {
             .sidebar {
@@ -88,9 +112,9 @@
                 font-size: 14px;
                 padding: 5px;
             }
-            .footer-item {
-                font-size: 20px;
-                margin: 0 5px;
+            .footer {
+                font-size: 14px;
+                padding: 5px 0;
             }
         }
     </style>
@@ -106,6 +130,13 @@
             <a href="{% url 'viewevents' %}" class="sidebar-item">
                 <i class="fas fa-briefcase icon"></i> Events
             </a>
+            <div class="sidebar-item" id="stories-toggle">
+                <i class="fa fa-book icon"></i> User Stories
+                <div class="dropdown-menu" id="stories-dropdown">
+                    <a href="{% url 'addstory' %}" class="dropdown-item">Add Story</a>
+                    <a href="{% url 'viewstory' %}" class="dropdown-item">View Stories</a>
+                </div>
+            </div>
             <a href="{% url 'logout' %}" class="sidebar-item">
                 <i class="fas fa-sign-out-alt icon"></i> Logout
             </a>
@@ -117,5 +148,23 @@
     <div class="footer">
         <p>&copy; Copyright 2024 by VersatalesClub. All Rights Reserved</p>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var storiesToggle = document.getElementById('stories-toggle');
+            var storiesDropdown = document.getElementById('stories-dropdown');
+
+            storiesToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                var isVisible = storiesDropdown.style.display === 'block';
+                storiesDropdown.style.display = isVisible ? 'none' : 'block';
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!storiesToggle.contains(event.target) && !storiesDropdown.contains(event.target)) {
+                    storiesDropdown.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,33 +1,33 @@
-{% extends 'baseadmin.html' %}
+{% extends 'basehome.html' %}
 {% load static %}
-{% block title %}Add Team Member{% endblock %}
+{% block title %}Add Story{% endblock %}
 {% block content %}
 <style>
     .form-heading {
-        text-align: center;
         font-size: 1.5em;
+        margin-bottom: 12px;
+        text-align: center;
         color: #444;
-        margin-bottom: 20px;
         font-family: 'Arial', sans-serif;
         font-weight: 600;
     }
 
-    .card {
+    .story-form {
         max-width: 600px;
         margin: 0 auto;
         padding: 16px;
         background-color: #f4f4f4;
         border: 1px solid #ddd;
         border-radius: 8px;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
 
-    .card p {
+    .story-form p {
         margin-bottom: 10px;
         line-height: 1.4;
     }
 
-    .card label {
+    .story-form label {
         display: block;
         font-weight: 500;
         margin-bottom: 2px;
@@ -35,10 +35,10 @@
         font-family: 'Arial', sans-serif;
     }
 
-    .card input[type="text"],
-    .card input[type="email"],
-    .card input[type="file"],
-    .card textarea {
+    .story-form input[type="text"],
+    .story-form input[type="email"],
+    .story-form textarea,
+    .story-form input[type="file"] {
         width: 100%;
         padding: 8px;
         border: 1px solid #ccc;
@@ -49,7 +49,7 @@
         font-family: 'Arial', sans-serif;
     }
 
-    .card textarea {
+    .story-form textarea {
         resize: vertical;
         min-height: 90px;
     }
@@ -99,7 +99,7 @@
     }
 
     @media (max-width: 600px) {
-        .card {
+        .story-form {
             padding: 12px;
         }
 
@@ -115,7 +115,7 @@
     }
 </style>
 
-<h2 class="form-heading">Add New Core Member</h2>
+<h2 class="form-heading">Add New Story</h2>
 
 <div>
     {% if messages %}
@@ -127,9 +127,9 @@
     {% endif %}
 </div>
 
-<form method="post" enctype="multipart/form-data" class="card">
+<form method="post" action="{% url 'addstory' %}" class="story-form" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn-submit">Add Team Member</button>
+    <button type="submit" class="btn-submit">Add Story</button>
 </form>
 {% endblock %}

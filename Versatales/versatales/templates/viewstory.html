@@ -1,0 +1,89 @@
+{% extends 'basehome.html' %}
+{% block title %}View Story{% endblock %}
+{% block content %}
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .alert {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+        border-collapse: collapse;
+    }
+    .table th, .table td {
+        border: 1px solid #dee2e6;
+        padding: .75rem;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .table thead th {
+        background-color: #f8f9fa;
+        color: #495057;
+    }
+    .table tbody tr:nth-of-type(even) {
+        background-color: #f2f2f2;
+    }
+    .story-image {
+        max-width: 100px;
+        height: auto;
+        object-fit: cover;
+    }
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <h2 class="text-center">Accepted User Stories</h2>
+    {% if stories %}
+        <div class="alert alert-success" role="alert">
+            Here are the stories that have been accepted.
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Image</th>
+                    <th>Content</th>
+                    <th>Creator</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for story in stories %}
+                    <tr>
+                        <td>{{ story.title }}</td>
+                        <td>{{ story.date }}</td>
+                        <td>
+                            <img src="{{ story.image.url }}" alt="{{ story.title }} Image" class="story-image"/>
+                        </td>
+                        <td>{{ story.content|slice:":100" }}{% if story.content|length > 100 %}...{% endif %}</td>
+                        <td>{{ story.creator }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No accepted stories found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center">No accepted stories found.</p>
+    {% endif %}
+</div>
+{% endblock %}

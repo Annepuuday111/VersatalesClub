@@ -31,12 +31,6 @@
             align-items: flex-start;
             padding: 20px;
         }
-        .dashboard-image {
-            max-width: 35%;
-            height: auto;
-            display: block;
-            margin: 0 auto 3px;
-        }
         .sidebar-item {
             width: 100%;
             margin: 10px 0;
@@ -48,12 +42,34 @@
             transition: background-color 0.1s ease;
             display: flex;
             align-items: center;
+            position: relative;
         }
         .sidebar-item:hover {
             background-color: rgba(255, 255, 255, 0.3);
         }
         .sidebar-item .icon {
             margin-right: 10px;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            z-index: 1000;
+            width: 100%;
+        }
+        .dropdown-item {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+            font-size: 16px;
+        }
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
         }
         .main-content {
             flex: 1;
@@ -68,6 +84,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 10px 0;
         }
         @media (max-width: 768px) {
             .sidebar {
@@ -88,9 +105,9 @@
                 font-size: 14px;
                 padding: 5px;
             }
-            .footer-item {
-                font-size: 20px;
-                margin: 0 5px;
+            .footer {
+                font-size: 14px;
+                padding: 5px 0;
             }
         }
     </style>
@@ -103,18 +120,37 @@
             <a href="{% url 'adminhome' %}" class="sidebar-item">
                 <i class="fas fa-tachometer-alt icon"></i> Dashboard
             </a>
-            <a href="{% url 'addteam' %}" class="sidebar-item">
-                <i class="fas fa-users icon"></i> Team Members
-            </a>
-            <a href="{% url 'addevent' %}" class="sidebar-item">
+            <div class="sidebar-item" id="team-toggle">
+                <i class="fas fa-users icon"></i> Add Team
+                <div class="dropdown-menu" id="team-dropdown">
+                    <a href="{% url 'addteam' %}" class="dropdown-item">Core Members</a>
+                    <a href="#member" class="dropdown-item">Team Members</a>
+                    <a href="{% url 'viewteam' %}" class="dropdown-item">View TeamList</a>
+                </div>
+            </div>
+            <div class="sidebar-item" id="events-toggle">
                 <i class="fas fa-briefcase icon"></i> Add Events
+                <div class="dropdown-menu" id="events-dropdown">
+                    <a href="{% url 'addevent' %}" class="dropdown-item">Add Event</a>
+                    <a href="{% url 'vieweventlist' %}" class="dropdown-item">View EventList</a>
+                </div>
+            </div>
+            <a href="{% url 'userstory' %}" class="sidebar-item">
+                <i class="fa fa-book icon"></i>&nbsp;&nbsp;User Story's
+            </a>
+            <a href="#updates" class="sidebar-item">
+                <i class="fa fa-refresh icon"></i>&nbsp;&nbsp;Updates
             </a>
             <a href="{% url 'viewqueries' %}" class="sidebar-item">
                 <i class="fas fa-users icon"></i> User Queries
             </a>
-            <a href="{% url 'addgallery' %}" class="sidebar-item">
-                <i class="fa-solid fa-image"></i>&nbsp;&nbsp;Gallery
-            </a>
+            <div class="sidebar-item" id="gallery-toggle">
+                <i class="fa-solid fa-image icon"></i>&nbsp;&nbsp;Gallery Handler
+                <div class="dropdown-menu" id="gallery-dropdown">
+                    <a href="{% url 'addgallery' %}" class="dropdown-item">Add Gallery</a>
+                    <a href="{% url 'viewgallery' %}" class="dropdown-item">View Gallery</a>
+                </div>
+            </div>
             <a href="{% url 'logout' %}" class="sidebar-item">
                 <i class="fas fa-sign-out-alt icon"></i> Logout
             </a>
@@ -126,5 +162,47 @@
     <div class="footer">
         <p>&copy; Copyright 2024 by VersatalesClub. All Rights Reserved</p>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var teamToggle = document.getElementById('team-toggle');
+            var teamDropdown = document.getElementById('team-dropdown');
+
+            teamToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                var isVisible = teamDropdown.style.display === 'block';
+                teamDropdown.style.display = isVisible ? 'none' : 'block';
+            });
+
+            var galleryToggle = document.getElementById('gallery-toggle');
+            var galleryDropdown = document.getElementById('gallery-dropdown');
+
+            galleryToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                var isVisible = galleryDropdown.style.display === 'block';
+                galleryDropdown.style.display = isVisible ? 'none' : 'block';
+            });
+
+            var eventsToggle = document.getElementById('events-toggle');
+            var eventsDropdown = document.getElementById('events-dropdown');
+
+            eventsToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                var isVisible = eventsDropdown.style.display === 'block';
+                eventsDropdown.style.display = isVisible ? 'none' : 'block';
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!teamToggle.contains(event.target) && !teamDropdown.contains(event.target)) {
+                    teamDropdown.style.display = 'none';
+                }
+                if (!galleryToggle.contains(event.target) && !galleryDropdown.contains(event.target)) {
+                    galleryDropdown.style.display = 'none';
+                }
+                if (!eventsToggle.contains(event.target) && !eventsDropdown.contains(event.target)) {
+                    eventsDropdown.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

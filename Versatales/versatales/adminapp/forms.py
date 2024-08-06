@@ -2,6 +2,7 @@ from django import forms
 from .models import Signup
 from .models import Contact
 from .models import Event
+from .models import Story
 from .models import GalleryImage
 from .models import TeamMember
 
@@ -27,11 +28,32 @@ class ContactForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'date', 'location', 'description']
+        fields = ['title', 'date', 'poster', 'location', 'description']
         widgets = {
             'date': forms.DateInput(attrs={
                 'type': 'date',
                 'placeholder': 'Select date',
+                'class': 'form-control',
+            }),
+        }
+
+class StoryForm(forms.ModelForm):
+    class Meta:
+        model = Story
+        fields = ['title', 'date', 'image', 'content', 'creator']
+        widgets = {
+            'date': forms.DateInput(attrs={
+                'type': 'date',
+                'placeholder': 'Select date',
+                'class': 'form-control',
+            }),
+            'content': forms.Textarea(attrs={
+                'placeholder': 'Write your story here',
+                'class': 'form-control',
+                'rows': 4,
+            }),
+            'creator': forms.TextInput(attrs={
+                'placeholder': 'Enter creator name',
                 'class': 'form-control',
             }),
         }

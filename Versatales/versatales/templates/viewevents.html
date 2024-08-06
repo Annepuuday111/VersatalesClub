@@ -6,15 +6,14 @@
         width: 80%;
         margin: 0 auto;
         border-collapse: collapse;
-        border: 1px solid black;
+        border: 1px solid #ddd;
     }
 
     .event-table th,
     .event-table td {
         padding: 12px;
         text-align: center;
-        border: 1px solid black;
-        border-bottom: 1px solid #ddd;
+        border: 1px solid #ddd;
     }
 
     .event-table thead {
@@ -22,7 +21,7 @@
     }
 
     .event-table th {
-        background-color: lightblue;
+        background-color: #007bff;
         color: #ffffff;
         font-weight: bold;
     }
@@ -33,6 +32,20 @@
 
     .event-table tbody tr:last-child td {
         border-bottom: none;
+    }
+
+    .event-poster-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+    }
+
+    .event-poster {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
     }
 
     @media (max-width: 600px) {
@@ -54,6 +67,7 @@
                 <tr>
                     <th>Title</th>
                     <th>Date</th>
+                    <th>Event Poster</th>
                     <th>Location</th>
                     <th>Description</th>
                 </tr>
@@ -63,6 +77,11 @@
                     <tr>
                         <td>{{ event.title }}</td>
                         <td>{{ event.date }}</td>
+                        <td>
+                            <div class="event-poster-container">
+                                <img src="{{ event.poster.url }}" alt="{{ event.title }} Poster" class="event-poster"/>
+                            </div>
+                        </td>
                         <td>{{ event.location }}</td>
                         <td>{{ event.description }}</td>
                     </tr>

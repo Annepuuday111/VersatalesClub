@@ -4,7 +4,7 @@
 {% block content %}
 <style>
     .form-heading {
-        font-size: 2em;
+        font-size: 1.5em;
         margin-bottom: 12px;
         text-align: center;
         color: #444;
@@ -38,7 +38,8 @@
     .event-form input[type="text"],
     .event-form input[type="email"],
     .event-form input[type="date"],
-    .event-form textarea {
+    .event-form textarea,
+    .event-form input[type="file"] {
         width: 100%;
         padding: 8px;
         border: 1px solid #ccc;
@@ -114,7 +115,9 @@
         }
     }
 </style>
-<h2 class="form-heading">Add Event</h2>
+
+<h2 class="form-heading">Add New Event</h2>
+
 <div>
     {% if messages %}
         {% for message in messages %}
@@ -124,7 +127,8 @@
         {% endfor %}
     {% endif %}
 </div>
-<form method="post" action="{% url 'addevent' %}" class="event-form">
+
+<form method="post" action="{% url 'addevent' %}" class="event-form" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn-submit">Add Event</button>

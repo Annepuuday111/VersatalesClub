@@ -2,20 +2,43 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Home and General Pages
     path('', views.index, name='index'),
     path('adminhome/', views.adminhome, name='adminhome'),
     path('home/', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('knowmore/', views.knowmore, name='knowmore'),
     path('contact/', views.contact, name='contact'),
-    path('viewqueries/', views.viewqueries, name='viewqueries'),
-    path('gallery/', views.gallery, name='gallery'),
-    path('teammembers/', views.teammembers, name='teammembers'),
+
+    # Authentication and User Management
     path('login/', views.login, name='login'),
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout, name='logout'),
+
+    # Events Management
     path('addevent/', views.addevent, name='addevent'),
     path('viewevents/', views.viewevents, name='viewevents'),
+    path('vieweventlist/', views.vieweventlist, name='vieweventlist'),
+    path('deleteevent/<int:event_id>/', views.deleteevent, name='deleteevent'),
+
+    # Gallery Management
+    path('gallery/', views.gallery, name='gallery'),
     path('addgallery/', views.addgallery, name='addgallery'),
+    path('viewgallery/', views.viewgallery, name='viewgallery'),
+    path('deletegalleryimage/<int:image_id>/', views.deletegalleryimage, name='deletegalleryimage'),
+
+    # Team Management
+    path('teammembers/', views.teammembers, name='teammembers'),
     path('addteam/', views.addteam, name='addteam'),
+    path('viewteam/', views.viewteam, name='viewteam'),
+    path('deleteteammember/<int:member_id>/', views.deleteteammember, name='deleteteammember'),
+
+    # Stories Management
+    path('addstory/', views.addstory, name='addstory'),
+    path('viewstory/', views.viewstory, name='viewstory'),
+    path('userstory/', views.userstory, name='userstory'),
+    path('updatestorystatus/<int:story_id>/', views.updatestorystatus, name='updatestorystatus'),
+
+    # Queries
+    path('viewqueries/', views.viewqueries, name='viewqueries'),
 ]
