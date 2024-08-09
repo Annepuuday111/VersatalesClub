@@ -60,9 +60,7 @@
         margin: auto;
     }
 </style>
-
 <h2 class="text-center">Gallery Image Records</h2>
-
 <div class="container">
     <div id="success-message" class="alert alert-success" style="display: none;"></div>
     {% if gallery_images %}
@@ -99,26 +97,21 @@
     function deleteGalleryImage(imageId) {
         if (confirm('Are you sure you want to delete this gallery image?')) {
             $.ajax({
-                url: '/delete-gallery-image/' + imageId + '/',
+                url: '{% url "deletegalleryimage" 0 %}'.replace('0', imageId),
                 type: 'POST',
                 data: {
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
                 success: function(response) {
-                    if (response.message) {
-                        $('#gallery-image-' + imageId).remove();
-                        $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
+                    if (response.success) {
+                        $('#gallery-image-' + imageId).remove(); // Remove the image row from the table
+                        $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut(); // Show success message
+                    } else {
+                        alert('Failed to delete gallery image: ' + response.message);
                     }
                 },
                 error: function(xhr) {
-                    if (xhr.status === 404) {
-                        $('#gallery-image-' + imageId).remove();
-                        $('#success-message').text('Gallery image not found.').fadeIn().delay(3000).fadeOut();
-                    } else if (xhr.status === 400) {
-                        alert('Invalid request method.');
-                    } else {
-                        alert('An error occurred while deleting the gallery image.');
-                    }
+                    alert('An error occurred while deleting the gallery image.');
                 }
             });
         }

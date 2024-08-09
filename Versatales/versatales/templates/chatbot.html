@@ -1,0 +1,154 @@
+{% extends 'basehome.html' %}
+{% load static %}
+{% block title %}AI Assistant{% endblock %}
+{% block content %}
+
+<style>
+    .chat-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        background-color: #f9f9f9;
+    }
+
+    #chat-box {
+        border: 1px solid #ddd;
+        padding: 10px;
+        height: 400px;
+        overflow-y: auto;
+        border-radius: 8px;
+        background-color: #fff;
+        margin-bottom: 10px;
+    }
+
+    #messages {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    #messages div {
+        padding: 5px;
+        border-radius: 4px;
+        word-wrap: break-word;
+    }
+
+    .user-message {
+        background-color: #d1e7dd; /* Light green for user messages */
+    }
+
+    .bot-message {
+        background-color: #f8d7da; /* Light red for bot messages */
+    }
+
+    .input-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #chat-message-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    #chat-message-submit {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    #chat-message-submit:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="chat-container">
+    <div id="chat-box">
+        <div id="messages"></div>
+    </div>
+    <div class="input-container">
+        <input id="chat-message-input" type="text" placeholder="Type a message..." />
+        <button id="chat-message-submit">Send</button>
+    </div>
+</div>
+
+<script>
+    // Establish WebSocket connection
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/'
+    );
+
+    chatSocket.onopen = function(e) {
+        console.log('WebSocket connection established');
+    };
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const userMessage = data['message'];
+        const botResponse = data['response'];
+
+        console.log('Received message:', userMessage);
+        console.log('Received response:', botResponse);
+
+        // Display user message
+        if (userMessage) {
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'user-message';
+            userMessageDiv.textContent = 'User: ' + userMessage;
+            document.querySelector('#messages').appendChild(userMessageDiv);
+        }
+
+        // Display bot response
+        if (botResponse) {
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'bot-message';
+            botMessageDiv.textContent = 'Bot: ' + botResponse;
+            document.querySelector('#messages').appendChild(botMessageDiv);
+        }
+
+        // Scroll to the bottom of the chat box
+        const chatBox = document.querySelector('#chat-box');
+        chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    chatSocket.onerror = function(e) {
+        console.error('WebSocket error:', e);
+    };
+
+    chatSocket.onclose = function(e) {
+        console.log('WebSocket connection closed');
+    };
+
+    // Handle send button click
+    document.querySelector('#chat-message-submit').onclick = function() {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        if (message.trim() !== '') {
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = ''; // Clear input field
+        }
+    };
+
+    // Handle Enter key press in input field
+    document.querySelector('#chat-message-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Prevent new line
+            document.querySelector('#chat-message-submit').click();
+        }
+    });
+</script>
+
+{% endblock %}

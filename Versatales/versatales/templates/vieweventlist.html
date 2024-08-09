@@ -106,29 +106,29 @@
         {% endif %}
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    function deleteEvent(eventId) {
-        if (confirm('Are you sure you want to delete this event?')) {
-            $.ajax({
-                url: '/delete-event/' + eventId + '/',
-                type: 'POST',
-                data: {
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    $('#event-' + eventId).remove();
-                    $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
-                },
-                error: function(xhr) {
-                    if (xhr.status === 404) {
+    <script>
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                $.ajax({
+                    url: '{% url "deleteevent" 0 %}'.replace('0', eventId),
+                    type: 'POST',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
                         $('#event-' + eventId).remove();
-                        $('#success-message').text('Event not found.').fadeIn().delay(3000).fadeOut();
-                    } else {
-                        alert('An error occurred while deleting the event.');
+                        $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 404) {
+                            $('#event-' + eventId).remove();
+                            $('#success-message').text('Event not found.').fadeIn().delay(3000).fadeOut();
+                        } else {
+                            alert('An error occurred while deleting the event.');
+                        }
                     }
-                }
-            });
+                });
+            }
         }
-    }
-</script>
+    </script>
 {% endblock %}

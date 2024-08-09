@@ -2,68 +2,16 @@
 {% load static %}
 {% block title %}User Home{% endblock %}
 {% block content %}
-    <style>
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.8);
-            overflow-y: auto;
-        }
-        .profile-card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            max-width: 500px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .profile-card img {
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            margin-bottom: 10px;
-        }
-        .profile-card h3 {
-            margin: 10px 0;
-            font-size: 24px;
-        }
-        .profile-card p {
-            margin: 5px 0;
-            font-size: 16px;
-        }
-        .profile-card .edit-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .profile-card .edit-btn:hover {
-            background-color: #0056b3;
-        }
-        .profile-card img {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-bottom: 10px;
-        }
-    </style>
-    <div class="profile-card">
-            <img src="{% static 'images/versatales.png' %}" alt="User Profile Picture">
-            <h3>John Doe</h3>
-            <p>Email: john.doe@example.com</p>
-            <p>Role: User</p>
-            <p>Phone: (123) 456-7890</p>
-            <p>Location: City, Country</p>
-            <a href="#edit-profile" class="edit-btn">Edit Profile</a>
-        </div>
+<style>
+  .dashboard-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 450px;
+    width: 450px;
+  }
+</style>
+<img src="{% static 'images/userhome.png' %}" alt="Dashboard Image" class="dashboard-image">
+    <h2 style="margin-top:-15px; color:blue;" align="center">Hi! {{ user.name }} Welcome to User Dashboard</h2>
+    <p align="center">Your User Panel is Ready to Use</p>
 {% endblock %}

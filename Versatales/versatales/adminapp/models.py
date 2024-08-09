@@ -1,10 +1,18 @@
 from django.db import models
 
 class Signup(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    ]
     name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100, unique=True)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=255)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    phone = models.CharField(max_length=20, blank=True)
+    location = models.CharField(max_length=100, blank=True)
 
     class Meta:
         db_table = 'signup_table'
@@ -78,3 +86,25 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return self.name
+
+class Member(models.Model):
+    name = models.CharField(max_length=255)
+    position = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    profile_picture = models.ImageField(upload_to='members/')
+    bio = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        db_table = "members_table"
+
+    def __str__(self):
+        return self.name
+
+class MarqueeContent(models.Model):
+    content = models.TextField()
+
+    class Meta:
+        db_table = "marqueecontent_table"
+
+    def __str__(self):
+        return self.content

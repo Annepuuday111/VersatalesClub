@@ -334,6 +334,34 @@
         .video-overlay.hidden {
             display: none;
         }
+        .marquee-container {
+        width: 100%;
+        background-color: #f1f1f1;
+        padding: 10px 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .marquee-content p {
+        font-size: 0.9em;
+        color: #333;
+        font-family: Arial, sans-serif;
+    }
+
+    .marquee-content p b {
+        color: #007bff;
+    }
+
+    .marquee-content p .symbol {
+        color: #ff9800;
+        margin-right: 5px;
+    }
+
+    .marquee-content p .latest-update {
+        color: #555;
+        font-weight: bold;
+        margin-right: 5px;
+    }
     </style>
 </head>
 <body>
@@ -344,10 +372,15 @@
     </div>
 
     <div class="marquee-container">
-        <div class="marquee-content">
-            <p><b>Latest Update: The application is under construction. Please co-operate with us</b></p>
-        </div>
+    <div class="marquee-content">
+        <p>
+            <span class="symbol">🔔</span>
+            <span class="latest-update">Latest Update:</span>
+            <b>{{ marquee_content.content|default_if_none:'No content available' }}</b>
+        </p>
     </div>
+    </div>
+
     <div class="main-content">
         <div class="left-side">
             <div class="title"><b style="color: red;">Koneru Lakshmaiah Education </b></div>
@@ -427,7 +460,7 @@
     </div>
 
     <script>
-        document.getElementById('introVideo').playbackRate = 0.5;
+        document.getElementById('introVideo').playbackRate = 0.4;
         document.getElementById('introVideo').addEventListener('ended', function () {
             document.getElementById('videoOverlay').classList.add('hidden');
         });

@@ -61,6 +61,20 @@
         font-family: 'Arial', sans-serif;
     }
 
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
     @media (max-width: 600px) {
         .queries-table {
             width: 100%;
@@ -82,11 +96,12 @@
                     <th>Email</th>
                     <th>File</th>
                     <th>Message</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for query in submissions %}
-                    <tr>
+                    <tr id="query-{{ query.id }}">
                         <td>{{ query.name }}</td>
                         <td>{{ query.email }}</td>
                         <td>
@@ -97,6 +112,9 @@
                             {% endif %}
                         </td>
                         <td>{{ query.message }}</td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteQuery({{ query.id }})">Delete</button>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -104,6 +122,30 @@
     {% else %}
         <p class="no-results">No queries found.</p>
     {% endif %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function deleteQuery(queryId) {
+            if (confirm('Are you sure you want to delete this query?')) {
+                $.ajax({
+                    url: '{% url "deletequery" 0 %}'.replace('0', queryId),
+                    type: 'POST',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        $('#query-' + queryId).remove();
+                        alert(response.message);
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 404) {
+                            $('#query-' + queryId).remove();
+                            alert('Query not found.');
+                        } else {
+                            alert('An error occurred while deleting the query.');
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 {% endblock %}
-
-

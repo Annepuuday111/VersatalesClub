@@ -3,24 +3,29 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from .models import GalleryImage
 from .models import Signup
 from .forms import ContactForm
 from .models import Contact
 from .models import TeamMember
+from .models import Member
 from .models import Event
 from .models import Story
 from .forms import StoryForm
 from .forms import EventForm
 from .forms import GalleryImageForm
 from .forms import TeamMemberForm
+from .forms import MemberForm
+from .models import MarqueeContent
 
 # Define fixed admin username and password
 FIXED_ADMIN_USERNAME = 'admin'
 FIXED_ADMIN_PASSWORD = 'admin@123'
 
 def index(request):
-    return render(request, "index.html")
+    marquee_content = MarqueeContent.objects.first()
+    return render(request, 'index.html', {'marquee_content': marquee_content})
 
 def adminhome(request):
     if request.session.get('is_admin'):
@@ -53,6 +58,16 @@ def contact(request):
 def viewqueries(request):
     submissions = Contact.objects.all()
     return render(request, 'viewqueries.html', {'submissions': submissions})
+
+def deletequery(request, query_id):
+    if request.method == 'POST':
+        query = get_object_or_404(Contact, pk=query_id)
+        query.delete()
+        return JsonResponse({'message': 'Query deleted successfully'}, status=200)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def chatbot(request):
+    return render(request, 'chatbot.html')
 
 def gallery(request):
     images = GalleryImage.objects.all()
@@ -158,6 +173,20 @@ def addteam(request):
         'form': form
     })
 
+def addmember(request):
+    if request.method == 'POST':
+        form = MemberForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Team member added successfully!')
+            return redirect('addmember')
+    else:
+        form = MemberForm()
+
+    return render(request, 'addmember.html', {
+        'form': form
+    })
+
 def addstory(request):
     if request.method == 'POST':
         form = StoryForm(request.POST, request.FILES)
@@ -202,33 +231,56 @@ def deleteevent(request, event_id):
     if request.method == 'POST':
         event = get_object_or_404(Event, pk=event_id)
         event.delete()
-        return JsonResponse({'message': 'Event deleted successfully'}, status=204)
+        return JsonResponse({'message': 'Event deleted successfully'}, status=200)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 def viewteam(request):
     team_members = TeamMember.objects.all()
-    return render(request, 'viewteam.html', {'team_members': team_members})
+    members = Member.objects.all()
+    return render(request, 'viewteam.html', {'team_members': team_members,'members': members})
 
 def deleteteammember(request, member_id):
     if request.method == 'POST':
         try:
             team_member = TeamMember.objects.get(pk=member_id)
             team_member.delete()
-            return JsonResponse({'message': 'Team member deleted successfully'}, status=204)
+            return JsonResponse({'message': 'Team member deleted successfully'}, status=200)
         except TeamMember.DoesNotExist:
             return JsonResponse({'error': 'Team member not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def deletemember(request, member_id):
+    if request.method == 'POST':
+        try:
+            member = Member.objects.get(pk=member_id)
+            member.delete()
+            return JsonResponse({'message': 'Member deleted successfully'}, status=200)
+        except Member.DoesNotExist:
+            return JsonResponse({'error': 'Member not found'}, status=404)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def viewgallery(request):
     gallery_images = GalleryImage.objects.all()
     return render(request, 'viewgallery.html', {'gallery_images': gallery_images})
 
+@require_POST
 def deletegalleryimage(request, image_id):
-    if request.method == 'POST':
-        try:
-            image = GalleryImage.objects.get(pk=image_id)
-            image.delete()
-            return JsonResponse({'message': 'Gallery image deleted successfully'}, status=204)
-        except GalleryImage.DoesNotExist:
-            return JsonResponse({'error': 'Gallery image not found'}, status=404)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+    try:
+        image = GalleryImage.objects.get(pk=image_id)
+        image.delete()
+        return JsonResponse({'success': True, 'message': 'Gallery image deleted successfully'}, status=200)
+    except GalleryImage.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Gallery image not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
+def updatemarquee(request):
+    if request.method == 'POST':
+        new_content = request.POST.get('content')
+        MarqueeContent.objects.update_or_create(id=1, defaults={'content': new_content})
+        messages.success(request, 'Marquee content updated successfully!')
+        marquee_content = MarqueeContent.objects.first()
+        return render(request, 'updatemarquee.html', {'marquee_content': marquee_content})
+
+    marquee_content = MarqueeContent.objects.first()
+    return render(request, 'updatemarquee.html', {'marquee_content': marquee_content})

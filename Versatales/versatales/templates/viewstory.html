@@ -46,6 +46,65 @@
     .text-center {
         text-align: center;
     }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 115%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 85%;
+        max-width: 800px;
+        max-height: 80vh;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+    }
+    .modal-body {
+        max-height: 60vh;
+        overflow-y: auto;
+        text-align: justify;
+    }
+    .modal-body p {
+        margin-bottom: 15px;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+    .modal-body h2 {
+        text-align: center;
+        color: red;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .read-more {
+        color: #007bff;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-left: 5px;
+    }
 </style>
 
 <div class="container">
@@ -72,12 +131,25 @@
                         <td>
                             <img src="{{ story.image.url }}" alt="{{ story.title }} Image" class="story-image"/>
                         </td>
-                        <td>{{ story.content|slice:":100" }}{% if story.content|length > 100 %}...{% endif %}</td>
+                        <td>
+                            {{ story.content|truncatewords:20 }}{% if story.content|length > 100 %}...{% endif %}
+                            <span class="read-more" onclick="openModal('{{ story.id }}')">Read More</span>
+                        </td>
                         <td>{{ story.creator }}</td>
                     </tr>
+
+                    <div id="modal-{{ story.id }}" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal('{{ story.id }}')">&times;</span>
+                            <h2 align="center" style="color:red">{{ story.title }}</h2>
+                            <div class="modal-body">
+                                <p>{{ story.content }}</p>
+                            </div>
+                        </div>
+                    </div>
                 {% empty %}
                     <tr>
-                        <td colspan="6" class="text-center">No accepted stories found.</td>
+                        <td colspan="5" class="text-center">No accepted stories found.</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -86,4 +158,23 @@
         <p class="text-center">No accepted stories found.</p>
     {% endif %}
 </div>
+
+<script>
+    function openModal(id) {
+        document.getElementById('modal-' + id).style.display = "block";
+    }
+
+    function closeModal(id) {
+        document.getElementById('modal-' + id).style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        var modals = document.getElementsByClassName('modal');
+        for (var i = 0; i < modals.length; i++) {
+            if (event.target == modals[i]) {
+                modals[i].style.display = "none";
+            }
+        }
+    }
+</script>
 {% endblock %}

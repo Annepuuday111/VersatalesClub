@@ -5,6 +5,7 @@ from .models import Event
 from .models import Story
 from .models import GalleryImage
 from .models import TeamMember
+from .models import Member
 
 
 class SignupForm(forms.ModelForm):
@@ -66,6 +67,14 @@ class GalleryImageForm(forms.ModelForm):
 class TeamMemberForm(forms.ModelForm):
     class Meta:
         model = TeamMember
+        fields = ['name', 'position', 'email', 'profile_picture', 'bio']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
+        }
+
+class MemberForm(forms.ModelForm):
+    class Meta:
+        model = Member
         fields = ['name', 'position', 'email', 'profile_picture', 'bio']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4, 'cols': 40}),

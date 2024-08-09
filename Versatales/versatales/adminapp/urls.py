@@ -30,8 +30,10 @@ urlpatterns = [
     # Team Management
     path('teammembers/', views.teammembers, name='teammembers'),
     path('addteam/', views.addteam, name='addteam'),
+    path('addmember/', views.addmember, name='addmember'),
     path('viewteam/', views.viewteam, name='viewteam'),
     path('deleteteammember/<int:member_id>/', views.deleteteammember, name='deleteteammember'),
+    path('deletemember/<int:member_id>/', views.deletemember, name='deletemember'),
 
     # Stories Management
     path('addstory/', views.addstory, name='addstory'),
@@ -41,4 +43,7 @@ urlpatterns = [
 
     # Queries
     path('viewqueries/', views.viewqueries, name='viewqueries'),
+    path('deletequery/<int:query_id>/', views.deletequery, name='deletequery'),
+    path('chatbot/', views.chatbot, name='chatbot'),
+    path('updatemarquee/', views.updatemarquee, name='updatemarquee'),
 ]
