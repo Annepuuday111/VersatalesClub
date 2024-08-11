@@ -114,6 +114,55 @@
             padding: 8px 16px;
         }
     }
+
+    .bulk-upload-section {
+        margin-top: 20px;
+        max-width: 600px;
+        margin: 20px auto 0 auto;
+        padding: 16px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+    .bulk-upload-section h3 {
+        font-size: 1.3em;
+        margin-bottom: 12px;
+        color: #444;
+        font-family: 'Arial', sans-serif;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .bulk-upload-section input[type="file"] {
+        display: block;
+        margin: 0 auto 12px auto;
+    }
+
+    .btn-upload {
+        background-color: #28a745;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-size: 15px;
+        cursor: pointer;
+        display: block;
+        width: 100%;
+        text-align: center;
+        transition: background-color 0.3s, transform 0.2s;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .btn-upload:hover {
+        background-color: #218838;
+    }
+
+    .btn-upload:active {
+        background-color: #1e7e34;
+        transform: scale(0.98);
+    }
 </style>
 
 <h2 class="form-heading">Add New Event</h2>
@@ -133,4 +182,13 @@
     {{ form.as_p }}
     <button type="submit" class="btn-submit">Add Event</button>
 </form>
+
+<h3 class="form-heading">Upload Bulk Events via Excel</h3>
+<div class="bulk-upload-section">
+    <form method="post" action="{% url 'bulkupload' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="event_file" accept=".xlsx, .xls">
+        <button type="submit" class="btn-upload">Upload Events</button>
+    </form>
+</div>
 {% endblock %}

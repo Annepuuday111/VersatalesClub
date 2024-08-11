@@ -32,7 +32,7 @@ class Contact(models.Model):
 class Event(models.Model):
     title = models.CharField(max_length=200)
     date = models.DateTimeField()
-    poster = models.ImageField(upload_to='event/')
+    poster = models.ImageField(upload_to='posters/', blank=True, null=True)
     location = models.CharField(max_length=200)
     description = models.TextField()
 
@@ -78,8 +78,10 @@ class TeamMember(models.Model):
     name = models.CharField(max_length=255)
     position = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='team_members/')
     bio = models.CharField(max_length=255, blank=True, null=True)
+
 
     class Meta:
         db_table = "teammembers_table"
@@ -91,8 +93,10 @@ class Member(models.Model):
     name = models.CharField(max_length=255)
     position = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    profile_picture = models.ImageField(upload_to='members/')
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='members/', blank=True, null=True)
     bio = models.CharField(max_length=255, blank=True, null=True)
+
 
     class Meta:
         db_table = "members_table"

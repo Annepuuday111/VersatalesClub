@@ -4,6 +4,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.http import HttpResponse
+import pandas as pd
+import xlwt
+from datetime import datetime
 from .models import GalleryImage
 from .models import Signup
 from .forms import ContactForm
@@ -141,9 +145,66 @@ def addevent(request):
 
     return render(request, 'addevent.html', {'form': form})
 
+def bulkupload(request):
+    if request.method == 'POST' and request.FILES.get('event_file'):
+        event_file = request.FILES['event_file']
+        try:
+            df = pd.read_excel(event_file)
+            for _, row in df.iterrows():
+                try:
+                    event_date = pd.to_datetime(row['Date'], errors='coerce')
+                    if pd.isna(event_date):
+                        event_date = None
+
+                    Event.objects.create(
+                        title=row['Title'],
+                        description=row['Description'],
+                        date=event_date,
+                        poster=None,
+                        location=row.get('Location', '')
+                    )
+                except Exception as e:
+                    messages.error(request, f'Error with row: {str(e)}')
+                    continue
+
+            messages.success(request, 'Events were uploaded successfully!')
+        except Exception as e:
+            messages.error(request, f'Error uploading events: {str(e)}')
+
+        return redirect('addevent')
+
+    return render(request, 'addevent.html')
+
 def viewevents(request):
     events = Event.objects.all()
     return render(request, 'viewevents.html', {'events': events})
+
+def downloadevents(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="events.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Events')
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Title', 'Date', 'Poster', 'Location', 'Description']
+
+    for col_num in range(len(columns)):
+        ws.write(0, col_num, columns[col_num], font_style)
+
+    rows = Event.objects.all().values_list('title', 'date', 'poster', 'location', 'description')
+
+    font_style = xlwt.XFStyle()
+    for row_num, row in enumerate(rows, start=1):
+        for col_num, value in enumerate(row):
+            if isinstance(value, datetime):
+                value = value.strftime('%Y-%m-%d')
+            ws.write(row_num, col_num, value, font_style)
+
+    wb.save(response)
+    return response
 
 def addgallery(request):
     if request.method == 'POST':
@@ -169,23 +230,133 @@ def addteam(request):
     else:
         form = TeamMemberForm()
 
-    return render(request, 'addteam.html', {
-        'form': form
-    })
+    return render(request, 'addteam.html', {'form': form})
+
+def bulkteamupload(request):
+    if request.method == 'POST':
+        if 'team_file' in request.FILES:
+            file = request.FILES['team_file']
+
+            if file.name.endswith('.xlsx') or file.name.endswith('.xls'):
+                try:
+                    df = pd.read_excel(file)
+
+                    print(df.columns)
+
+                    for _, row in df.iterrows():
+                        TeamMember.objects.create(
+                            name=row.get('name', ''),
+                            position=row.get('position', ''),
+                            email=row.get('email', ''),
+                            phone=row.get('phone', ''),
+                            profile_picture=row.get('profile_picture', None),
+                            bio=row.get('bio', '')
+                        )
+
+                    messages.success(request, 'Team members uploaded successfully!')
+                    return redirect('addteam')
+                except Exception as e:
+                    messages.error(request, f'Error processing file: {e}')
+            else:
+                messages.error(request, 'Invalid file format. Please upload an Excel file.')
+
+    return render(request, 'addteam.html')
+
+def downloadteammembers(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="team_members.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Team Members')
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Name', 'Position', 'Email', 'Bio', 'Profile Picture']
+
+    for col_num in range(len(columns)):
+        ws.write(0, col_num, columns[col_num], font_style)
+
+    rows = TeamMember.objects.all().values_list('name', 'position', 'email', 'bio', 'profile_picture')
+
+    font_style = xlwt.XFStyle()
+    for row_num, row in enumerate(rows, start=1):
+        for col_num, value in enumerate(row):
+            if col_num == 4 and isinstance(value, str):
+                value = value if value else 'No Picture'
+            ws.write(row_num, col_num, value, font_style)
+
+    wb.save(response)
+    return response
 
 def addmember(request):
     if request.method == 'POST':
         form = MemberForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Team member added successfully!')
+            messages.success(request, 'Member added successfully!')
             return redirect('addmember')
     else:
         form = MemberForm()
 
-    return render(request, 'addmember.html', {
-        'form': form
-    })
+    return render(request, 'addmember.html', {'form': form})
+
+def bulkmemberupload(request):
+    if request.method == 'POST':
+        if 'team_file' in request.FILES:
+            file = request.FILES['team_file']
+
+            if file.name.endswith('.xlsx') or file.name.endswith('.xls'):
+                try:
+                    df = pd.read_excel(file)
+
+                    print(df.columns)
+
+                    for _, row in df.iterrows():
+                        Member.objects.create(
+                            name=row.get('name', ''),
+                            position=row.get('position', ''),
+                            email=row.get('email', ''),
+                            phone=row.get('phone', ''),
+                            profile_picture=row.get('profile_picture', None),
+                            bio=row.get('bio', '')
+                        )
+
+                    messages.success(request, 'Team members uploaded successfully!')
+                    return redirect('addmember')
+                except Exception as e:
+                    messages.error(request, f'Error processing file: {e}')
+            else:
+                messages.error(request, 'Invalid file format. Please upload an Excel file.')
+
+    return render(request, 'addmember.html')
+
+def downloadmembers(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="members.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Members')
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Name', 'Position', 'Email', 'Bio', 'Profile Picture']
+
+    for col_num in range(len(columns)):
+        ws.write(0, col_num, columns[col_num], font_style)
+
+    rows = Member.objects.all().values_list('name', 'position', 'email', 'bio', 'profile_picture')
+
+    font_style = xlwt.XFStyle()
+    for row_num, row in enumerate(rows, start=1):
+        for col_num, value in enumerate(row):
+            if col_num == 4 and isinstance(value, str):
+                value = value if value else 'No Picture'
+            ws.write(row_num, col_num, value, font_style)
+
+    wb.save(response)
+    return response
 
 def addstory(request):
     if request.method == 'POST':

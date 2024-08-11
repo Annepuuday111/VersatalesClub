@@ -17,8 +17,10 @@ urlpatterns = [
 
     # Events Management
     path('addevent/', views.addevent, name='addevent'),
+    path('bulkupload/', views.bulkupload, name='bulkupload'),
     path('viewevents/', views.viewevents, name='viewevents'),
     path('vieweventlist/', views.vieweventlist, name='vieweventlist'),
+    path('downloadevents/', views.downloadevents, name='downloadevents'),
     path('deleteevent/<int:event_id>/', views.deleteevent, name='deleteevent'),
 
     # Gallery Management
@@ -31,7 +33,11 @@ urlpatterns = [
     path('teammembers/', views.teammembers, name='teammembers'),
     path('addteam/', views.addteam, name='addteam'),
     path('addmember/', views.addmember, name='addmember'),
+    path('bulkteamupload/', views.bulkteamupload, name='bulkteamupload'),
+    path('bulkmemberupload/', views.bulkmemberupload, name='bulkmemberupload'),
     path('viewteam/', views.viewteam, name='viewteam'),
+    path('downloadteammembers/', views.downloadteammembers, name='downloadteammembers'),
+    path('downloadmembers/', views.downloadmembers, name='downloadmembers'),
     path('deleteteammember/<int:member_id>/', views.deleteteammember, name='deleteteammember'),
     path('deletemember/<int:member_id>/', views.deletemember, name='deletemember'),
 

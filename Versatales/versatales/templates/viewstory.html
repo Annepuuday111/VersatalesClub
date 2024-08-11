@@ -126,7 +126,7 @@
             <tbody>
                 {% for story in stories %}
                     <tr>
-                        <td>{{ story.title }}</td>
+                        <td>{{ story.title|title }}</td>
                         <td>{{ story.date }}</td>
                         <td>
                             <img src="{{ story.image.url }}" alt="{{ story.title }} Image" class="story-image"/>
@@ -135,13 +135,13 @@
                             {{ story.content|truncatewords:20 }}{% if story.content|length > 100 %}...{% endif %}
                             <span class="read-more" onclick="openModal('{{ story.id }}')">Read More</span>
                         </td>
-                        <td>{{ story.creator }}</td>
+                        <td>{{ story.creator|title }}</td>
                     </tr>
 
                     <div id="modal-{{ story.id }}" class="modal">
                         <div class="modal-content">
                             <span class="close" onclick="closeModal('{{ story.id }}')">&times;</span>
-                            <h2 align="center" style="color:red">{{ story.title }}</h2>
+                            <h2 align="center" style="color:red">{{ story.title|title }}</h2>
                             <div class="modal-body">
                                 <p>{{ story.content }}</p>
                             </div>

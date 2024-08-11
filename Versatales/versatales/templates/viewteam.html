@@ -21,21 +21,32 @@
         color: #155724;
         border-color: #c3e6cb;
     }
-    .btn-danger {
-        background-color: #dc3545;
-        color: white;
-        border: none;
+    .btn-danger, .btn-download {
         padding: 8px 16px;
         border-radius: 4px;
         font-size: 16px;
         cursor: pointer;
+        border: none;
+        color: white;
+        text-align: center;
+        display: inline-block;
+        text-decoration: none;
+    }
+    .btn-danger {
+        background-color: #dc3545;
     }
     .btn-danger:hover {
         background-color: #c82333;
     }
+    .btn-download {
+        background-color: #28a745;
+    }
+    .btn-download:hover {
+        background-color: #218838;
+    }
     .table {
         width: 100%;
-        margin: 0 auto;
+        margin: 20px 0;
         border-collapse: collapse;
     }
     .table-bordered {
@@ -60,18 +71,23 @@
         text-align: center;
         font-size: 24px;
     }
+    .button-container {
+        text-align: right;
+        margin-bottom: 20px;
+    }
 </style>
 
 <div class="container">
     <h2 class="text-center">Team Member Records</h2>
 
-    <!-- Success Message -->
     <div id="success-message" class="alert alert-success" style="display: none;"></div>
 
-    <!-- Core Team Members Table -->
-    <div>
+    <div id="core-team-section">
         <h3 class="section-title">Core Team Members</h3>
         {% if team_members %}
+            <div class="button-container">
+                <a href="{% url 'downloadteammembers' %}" class="btn btn-download">Download Core Team</a>
+            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -86,7 +102,13 @@
                 <tbody id="team-table-body">
                     {% for member in team_members %}
                         <tr id="team-member-{{ member.id }}">
-                            <td><img src="{{ member.profile_picture.url }}" alt="Profile Picture" class="gallery-image"/></td>
+                            <td>
+                                {% if member.profile_picture %}
+                                    <img src="{{ member.profile_picture.url }}" alt="Profile Picture" class="gallery-image"/>
+                                {% else %}
+                                    <img src="{% static 'default-profile-picture.png' %}" alt="Default Profile Picture" class="gallery-image"/>
+                                {% endif %}
+                            </td>
                             <td>{{ member.name }}</td>
                             <td>{{ member.position }}</td>
                             <td>{{ member.email }}</td>
@@ -107,10 +129,12 @@
         {% endif %}
     </div>
 
-    <!-- Members Table -->
-    <div>
+    <div id="members-section">
         <h3 class="section-title">Members</h3>
         {% if members %}
+            <div class="button-container">
+                <a href="{% url 'downloadmembers' %}" class="btn btn-download">Download Members</a>
+            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -125,7 +149,13 @@
                 <tbody id="members-table-body">
                     {% for member in members %}
                         <tr id="member-{{ member.id }}">
-                            <td><img src="{{ member.profile_picture.url }}" alt="Profile Picture" class="gallery-image"/></td>
+                            <td>
+                                {% if member.profile_picture %}
+                                    <img src="{{ member.profile_picture.url }}" alt="Profile Picture" class="gallery-image"/>
+                                {% else %}
+                                    <img src="{% static 'default-profile-picture.png' %}" alt="Default Profile Picture" class="gallery-image"/>
+                                {% endif %}
+                            </td>
                             <td>{{ member.name }}</td>
                             <td>{{ member.position }}</td>
                             <td>{{ member.email }}</td>
@@ -149,60 +179,85 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function deleteTeamMember(memberId) {
-        if (confirm('Are you sure you want to delete this team member?')) {
-            $.ajax({
-                url: '{% url "deleteteammember" 0 %}'.replace('0', memberId),
-                type: 'POST',
-                data: {
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    if (response.message) {
-                        $('#team-member-' + memberId).remove();
-                        $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
-                    } else {
-                        alert('Failed to delete team member.');
-                    }
-                },
-                error: function(xhr) {
-                    if (xhr.status === 404) {
-                        $('#team-member-' + memberId).remove();
-                        $('#success-message').text('Team member not found.').fadeIn().delay(3000).fadeOut();
-                    } else {
-                        alert('An error occurred while deleting the team member.');
-                    }
-                }
-            });
-        }
-    }
+    $(document).ready(function() {
+        function toggleButtonVisibility() {
+            if ($('#team-table-body tr').length > 0) {
+                $('#core-team-buttons').show();
+            } else {
+                $('#core-team-buttons').hide();
+            }
 
-    function deleteMember(memberId) {
-        if (confirm('Are you sure you want to delete this member?')) {
-            $.ajax({
-                url: '{% url "deletemember" 0 %}'.replace('0', memberId),
-                type: 'POST',
-                data: {
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    if (response.message) {
-                        $('#member-' + memberId).remove();
-                        $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
-                    } else {
-                        alert('Failed to delete member.');
-                    }
-                },
-                error: function(xhr) {
-                    if (xhr.status === 404) {
-                        $('#member-' + memberId).remove();
-                        $('#success-message').text('Member not found.').fadeIn().delay(3000).fadeOut();
-                    } else {
-                        alert('An error occurred while deleting the member.');
-                    }
-                }
-            });
+            if ($('#members-table-body tr').length > 0) {
+                $('#members-buttons').show();
+            } else {
+                $('#members-buttons').hide();
+            }
         }
-    }
+
+        toggleButtonVisibility();
+
+        function deleteTeamMember(memberId) {
+            if (confirm('Are you sure you want to delete this team member?')) {
+                $.ajax({
+                    url: '{% url "deleteteammember" 0 %}'.replace('0', memberId),
+                    type: 'POST',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.message) {
+                            $('#team-member-' + memberId).remove();
+                            toggleButtonVisibility();
+                            $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
+                        } else {
+                            alert('Failed to delete team member.');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 404) {
+                            $('#team-member-' + memberId).remove();
+                            toggleButtonVisibility();
+                            $('#success-message').text('Team member not found.').fadeIn().delay(3000).fadeOut();
+                        } else {
+                            alert('An error occurred while deleting the team member.');
+                        }
+                    }
+                });
+            }
+        }
+
+        function deleteMember(memberId) {
+            if (confirm('Are you sure you want to delete this member?')) {
+                $.ajax({
+                    url: '{% url "deletemember" 0 %}'.replace('0', memberId),
+                    type: 'POST',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.message) {
+                            $('#member-' + memberId).remove();
+                            toggleButtonVisibility();
+                            $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
+                        } else {
+                            alert('Failed to delete member.');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 404) {
+                            $('#member-' + memberId).remove();
+                            toggleButtonVisibility();
+                            $('#success-message').text('Member not found.').fadeIn().delay(3000).fadeOut();
+                        } else {
+                            alert('An error occurred while deleting the member.');
+                        }
+                    }
+                });
+            }
+        }
+
+        window.deleteTeamMember = deleteTeamMember;
+        window.deleteMember = deleteMember;
+    });
 </script>
 {% endblock %}

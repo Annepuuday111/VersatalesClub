@@ -27,7 +27,7 @@
         font-size: 16px;
         cursor: pointer;
         text-align: center;
-        margin: 0 10px; /* Increased margin for spacing */
+        margin: 0 10px;
     }
     .btn-accept {
         background-color: #28a745;
@@ -130,28 +130,40 @@
         display: inline-block;
         margin-top: 10px;
     }
+    .creator-details {
+        display: inline-block;
+        color: #007bff;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    .creator-image {
+        max-width: 150px;
+        height: auto;
+        border-radius: 50%;
+    }
 </style>
 
-<h2 class="text-center">User Stories Records</h2>
+<h2 class="text-center">{{ "User Stories Records"|title }}</h2>
 <div class="container">
     <div id="success-message" class="alert alert-success" style="display: none;"></div>
     {% if stories %}
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Date</th>
-                    <th>Image</th>
-                    <th>Content</th>
-                    <th>Creator</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th>{{ "Title"|title }}</th>
+                    <th>{{ "Date"|title }}</th>
+                    <th>{{ "Story Poster"|title }}</th>
+                    <th>{{ "Content"|title }}</th>
+                    <th>{{ "Creator"|title }}</th>
+                    <th>{{ "Status"|title }}</th>
+                    <th>{{ "Action"|title }}</th>
                 </tr>
             </thead>
             <tbody id="story-table-body">
                 {% for story in stories %}
                     <tr id="story-{{ story.id }}">
-                        <td>{{ story.title }}</td>
+                        <td>{{ story.title|title }}</td>
                         <td>{{ story.date }}</td>
                         <td>
                             <div class="story-image-container">
@@ -164,7 +176,9 @@
                                 <span class="read-more" onclick="openModal('{{ story.id }}')">Read More</span>
                             {% endif %}
                         </td>
-                        <td>{{ story.creator }}</td>
+                        <td>
+                            <span class="creator-details" onclick="openCreatorModal('{{ story.creator_id }}')">{{ story.creator|title }}</span>
+                        </td>
                         <td>{{ story.get_status_display }}</td>
                         <td>
                             <button class="btn btn-accept" onclick="updateStoryStatus({{ story.id }}, 'accepted')">Accept</button>
@@ -175,9 +189,23 @@
                     <div id="modal-{{ story.id }}" class="modal">
                         <div class="modal-content">
                             <span class="close" onclick="closeModal('{{ story.id }}')">&times;</span>
-                            <h2 align="center" style="color:red">{{ story.title }}</h2>
+                            <h2 align="center" style="color:red">{{ story.title|title }}</h2>
                             <div class="modal-body">
                                 <p>{{ story.content }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="creator-modal-{{ story.creator_id }}" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeCreatorModal('{{ story.creator_id }}')">&times;</span>
+                            <h2 align="center" style="color:red">{{ story.creator|title }}'s Details</h2>
+                            <div class="modal-body">
+                                <img src="{{ story.image.url }}" alt="{{ story.title }} Image" class="creator-image" style="display: block; margin: 0 auto;"/>
+                                <p><b style="color:red">Name:</b> {{ story.creator }}</p>
+                                <p><b style="color:red">Title:</b> {{ story.title }}</p>
+                                <p><b style="color:red">Date:</b> {{ story.date }}</p>
+                                <p><b style="color:red">Status:</b> {{ story.get_status_display }}</p>
                             </div>
                         </div>
                     </div>
@@ -203,6 +231,14 @@
         document.getElementById('modal-' + id).style.display = "none";
     }
 
+    function openCreatorModal(id) {
+        document.getElementById('creator-modal-' + id).style.display = "block";
+    }
+
+    function closeCreatorModal(id) {
+        document.getElementById('creator-modal-' + id).style.display = "none";
+    }
+
     window.onclick = function(event) {
         var modals = document.getElementsByClassName('modal');
         for (var i = 0; i < modals.length; i++) {
@@ -224,7 +260,7 @@
                 success: function(response) {
                     if (response.message) {
                         var statusText = status.charAt(0).toUpperCase() + status.slice(1);
-                        $('#story-' + storyId).find('td').eq(5).text(statusText); // Update status
+                        $('#story-' + storyId).find('td').eq(5).text(statusText);
                         $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
                         if (status === 'rejected') {
                             $('#story-' + storyId).remove();

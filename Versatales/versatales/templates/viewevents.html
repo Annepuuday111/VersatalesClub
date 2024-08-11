@@ -1,65 +1,66 @@
 {% extends 'basehome.html' %}
 {% block title %}View Events{% endblock %}
 {% block content %}
-<style>
-    .event-table {
-        width: 80%;
-        margin: 0 auto;
-        border-collapse: collapse;
-        border: 1px solid #ddd;
-    }
-
-    .event-table th,
-    .event-table td {
-        padding: 12px;
-        text-align: center;
-        border: 1px solid #ddd;
-    }
-
-    .event-table thead {
-        background-color: #f4f4f4;
-    }
-
-    .event-table th {
-        background-color: #007bff;
-        color: #ffffff;
-        font-weight: bold;
-    }
-
-    .event-table tbody tr:hover {
-        background-color: #f1f1f1;
-    }
-
-    .event-table tbody tr:last-child td {
-        border-bottom: none;
-    }
-
-    .event-poster-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100px;
-    }
-
-    .event-poster {
-        max-width: 100px;
-        max-height: 100px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
-    @media (max-width: 600px) {
+    <style>
         .event-table {
-            width: 100%;
-            font-size: 14px;
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
         }
 
         .event-table th,
         .event-table td {
-            padding: 8px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
         }
-    }
-</style>
+
+        .event-table thead {
+            background-color: #f4f4f4;
+        }
+
+        .event-table th {
+            background-color: #007bff;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .event-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .event-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .event-poster-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .event-poster {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .event-table {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            .event-table th,
+            .event-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+
     <h2 align="center">Events</h2>
     {% if events %}
         <table class="event-table">
@@ -79,7 +80,11 @@
                         <td>{{ event.date }}</td>
                         <td>
                             <div class="event-poster-container">
-                                <img src="{{ event.poster.url }}" alt="{{ event.title }} Poster" class="event-poster"/>
+                                {% if event.poster %}
+                                    <img src="{{ event.poster.url }}" alt="{{ event.title }} Poster" class="event-poster"/>
+                                {% else %}
+                                    <p>No Poster Available</p>
+                                {% endif %}
                             </div>
                         </td>
                         <td>{{ event.location }}</td>
