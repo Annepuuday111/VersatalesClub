@@ -6,9 +6,12 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('adminhome/', views.adminhome, name='adminhome'),
     path('home/', views.home, name='home'),
+    path('corehome/', views.corehome, name='corehome'),
     path('about/', views.about, name='about'),
     path('knowmore/', views.knowmore, name='knowmore'),
     path('contact/', views.contact, name='contact'),
+    path('update-user-status/', views.update_user_status, name='update_user_status'),
+    path('delete-user/', views.delete_user, name='delete_user'),
 
     # Authentication and User Management
     path('login/', views.login, name='login'),
@@ -51,5 +54,6 @@ urlpatterns = [
     path('viewqueries/', views.viewqueries, name='viewqueries'),
     path('deletequery/<int:query_id>/', views.deletequery, name='deletequery'),
     path('chatbot/', views.chatbot, name='chatbot'),
+    path('users/', views.users, name='users'),
     path('updatemarquee/', views.updatemarquee, name='updatemarquee'),
 ]

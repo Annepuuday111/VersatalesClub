@@ -35,6 +35,7 @@
         .signup-container {
             position: relative;
             width: 90%;
+            margin-top: -90px;
             max-width: 400px;
             z-index: 1;
         }
@@ -71,13 +72,14 @@
             max-height: 40px;
             margin-right: 10px;
         }
-        .front-card input {
+        .front-card input, .front-card select {
             width: calc(100% - 20px);
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            font-size: 16px;
         }
         .front-card button {
             width: 100%;
@@ -179,6 +181,14 @@
                 {% csrf_token %}
                 <input type="text" name="name" placeholder="Name" required>
                 <input type="email" name="email" placeholder="Email" required>
+                <select name="gender" required>
+                    <option value="" disabled selected>Gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="O">Other</option>
+                </select>
+                <input type="text" name="phone" placeholder="Phone" required>
+                <input type="text" name="location" placeholder="Location" required>
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="password" name="password" placeholder="Password" required>
                 <button type="submit">Sign Up</button>

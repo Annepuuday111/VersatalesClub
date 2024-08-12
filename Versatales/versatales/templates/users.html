@@ -1,0 +1,197 @@
+{% extends 'baseadmin.html' %}
+{% load static %}
+{% block title %}All Users{% endblock %}
+{% block content %}
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .alert {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+    .btn-danger, .btn-core, .btn-reject {
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        color: white;
+        margin: 0 5px;
+    }
+    .btn-danger {
+        background-color: #dc3545;
+    }
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+    .btn-core {
+        background-color: #28a745;
+    }
+    .btn-core:hover {
+        background-color: #218838;
+    }
+    .btn-reject {
+        background-color: #ffc107;
+        color: black;
+    }
+    .btn-reject:hover {
+        background-color: #e0a800;
+    }
+    .table {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #dee2e6;
+        padding: .75rem;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .section-title {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 24px;
+    }
+    .btn-group {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+    .table-container {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<div class="container">
+    <h2 class="text-center">All Registered Users</h2>
+    <div id="success-message" class="alert alert-success" style="display: none;"></div>
+    <div class="table-container">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="user-table-body">
+                {% for user in users %}
+                    <tr id="user-{{ user.id }}">
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.get_gender_display }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.location }}</td>
+                        <td>{{ user.is_core_member|yesno:"Core Member,Regular User" }}</td>
+                        <td class="btn-group">
+                            {% if user.is_core_member %}
+                                <button class="btn btn-reject" onclick="updateUserStatus({{ user.id }}, 'regular')">Remove Core Member</button>
+                            {% else %}
+                                <button class="btn btn-core" onclick="updateUserStatus({{ user.id }}, 'core')">Set Core Member</button>
+                            {% endif %}
+                            <button class="btn btn-danger" onclick="deleteUser({{ user.id }})">Delete</button>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">No Users found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function updateUserStatus(userId, status) {
+        $.ajax({
+            url: '{% url "update_user_status" %}',
+            type: 'POST',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                'user_id': userId,
+                'status': status
+            },
+            success: function(response) {
+                if (response.message) {
+                    $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
+
+                    var row = $('#user-' + userId);
+                    var statusCell = row.find('td').eq(6); // Status cell
+
+                    if (status === 'core') {
+                        row.find('.btn-core').hide();
+                        row.find('.btn-reject').show();
+                        statusCell.text('Core Member');
+                    } else {
+                        row.find('.btn-core').show();
+                        row.find('.btn-reject').hide();
+                        statusCell.text('Regular User');
+                    }
+                } else {
+                    alert('Failed to update user status.');
+                }
+            },
+            error: function(xhr) {
+                alert('An error occurred while updating the user status.');
+            }
+        });
+    }
+
+    function deleteUser(userId) {
+        if (confirm('Are you sure you want to delete this user?')) {
+            $.ajax({
+                url: '{% url "delete_user" %}',
+                type: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'user_id': userId
+                },
+                success: function(response) {
+                    if (response.message) {
+                        $('#user-' + userId).remove();
+                        $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
+                    } else {
+                        alert('Failed to delete user.');
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 404) {
+                        $('#user-' + userId).remove();
+                        $('#success-message').text('User not found.').fadeIn().delay(3000).fadeOut();
+                    } else {
+                        alert('An error occurred while deleting the user.');
+                    }
+                }
+            });
+        }
+    }
+</script>
+
+{% endblock %}

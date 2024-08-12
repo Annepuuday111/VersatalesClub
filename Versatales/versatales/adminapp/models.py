@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 class Signup(models.Model):
     GENDER_CHOICES = [
@@ -13,6 +14,7 @@ class Signup(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     phone = models.CharField(max_length=20, blank=True)
     location = models.CharField(max_length=100, blank=True)
+    is_core_member = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'signup_table'
@@ -112,3 +114,22 @@ class MarqueeContent(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class User(AbstractUser):
+    groups = models.ManyToManyField(
+        Group,
+        related_name='adminapp_user_set',  # Add related_name to avoid conflict
+        blank=True,
+        help_text=('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
+        related_query_name='user',
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='adminapp_user_set',  # Add related_name to avoid conflict
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_query_name='user',
+    )
+
+    # Add any additional fields or methods here

@@ -1,0 +1,17 @@
+{% extends 'basecoremember.html' %}
+{% load static %}
+{% block title %}All Users{% endblock %}
+{% block content %}
+<style>
+  .dashboard-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 500px;
+    width: 800px;
+  }
+</style>
+<img src="{% static 'images/corehome.png' %}" alt="Dashboard Image" class="dashboard-image">
+    <h2 style="margin-top:-15px; color:blue;" align="center">Hi! {{ user.name }} Welcome to Core Dashboard</h2>
+    <p align="center">Your Core Panel is Ready to Use</p>
+{% endblock %}

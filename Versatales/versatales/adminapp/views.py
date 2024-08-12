@@ -7,6 +7,9 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 import pandas as pd
 import xlwt
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from .models import User
 from datetime import datetime
 from .models import GalleryImage
 from .models import Signup
@@ -41,6 +44,9 @@ def home(request):
         return render(request, "home.html")
     return redirect('login')
 
+def corehome(request):
+    return render(request, 'corehome.html')
+
 def about(request):
     return render(request, 'about.html')
 
@@ -58,6 +64,10 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'contact.html', {'form': form})
+
+def users(request):
+    users = Signup.objects.all()
+    return render(request, 'users.html', {'users': users})
 
 def viewqueries(request):
     submissions = Contact.objects.all()
@@ -96,7 +106,11 @@ def login(request):
             user = Signup.objects.get(username=username)
             if check_password(password, user.password):
                 request.session['is_admin'] = False
-                return redirect('home')
+                request.session['user_id'] = user.id
+                if user.is_core_member:
+                    return redirect('corehome')
+                else:
+                    return redirect('home')
             else:
                 messages.error(request, 'Invalid credentials')
         except Signup.DoesNotExist:
@@ -110,6 +124,9 @@ def signup(request):
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
+        gender = request.POST.get('gender')
+        phone = request.POST.get('phone')
+        location = request.POST.get('location')
 
         if Signup.objects.filter(username=username).exists():
             messages.error(request, 'The username is already taken, please choose a different username.')
@@ -120,7 +137,7 @@ def signup(request):
         else:
 
             hashed_password = make_password(password)
-            Signup.objects.create(name=name, email=email, username=username, password=hashed_password)
+            Signup.objects.create(name=name, email=email, username=username, password=hashed_password, gender=gender, phone=phone, location=location)
             messages.success(request, 'Signup successful! Please log in.')
             return redirect('login')
 
@@ -277,7 +294,7 @@ def downloadteammembers(request):
     for col_num in range(len(columns)):
         ws.write(0, col_num, columns[col_num], font_style)
 
-    rows = TeamMember.objects.all().values_list('name', 'position', 'email', 'bio', 'profile_picture')
+    rows = TeamMember.objects.all().values_list('name', 'position', 'email', 'phone', 'bio', 'profile_picture')
 
     font_style = xlwt.XFStyle()
     for row_num, row in enumerate(rows, start=1):
@@ -346,7 +363,7 @@ def downloadmembers(request):
     for col_num in range(len(columns)):
         ws.write(0, col_num, columns[col_num], font_style)
 
-    rows = Member.objects.all().values_list('name', 'position', 'email', 'bio', 'profile_picture')
+    rows = Member.objects.all().values_list('name', 'position', 'email', 'phone', 'bio', 'profile_picture')
 
     font_style = xlwt.XFStyle()
     for row_num, row in enumerate(rows, start=1):
@@ -455,3 +472,55 @@ def updatemarquee(request):
 
     marquee_content = MarqueeContent.objects.first()
     return render(request, 'updatemarquee.html', {'marquee_content': marquee_content})
+
+def update_user_status(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        status = request.POST.get('status')
+
+        if status not in ['core', 'regular']:
+            return JsonResponse({'message': 'Invalid status.'}, status=400)
+
+        user = get_object_or_404(Signup, id=user_id)
+        if status == 'core':
+            user.is_core_member = True
+        else:
+            user.is_core_member = False
+        user.save()
+
+        return JsonResponse({'message': 'User status updated successfully.'})
+
+    return JsonResponse({'message': 'Invalid request method.'}, status=405)
+
+
+@csrf_exempt
+def delete_user(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+                user.delete()
+                return JsonResponse({'message': 'User deleted successfully.'})
+            except User.DoesNotExist:
+                return JsonResponse({'message': 'User not found.'}, status=404)
+        else:
+            return JsonResponse({'message': 'User ID not provided.'}, status=400)
+    return JsonResponse({'message': 'Invalid request method.'}, status=400)
+
+@login_required
+def set_core_member(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        status = request.POST.get('status')
+
+        try:
+            user = Signup.objects.get(id=user_id)
+            user.is_core_member = (status == 'core')
+            user.save()
+            return JsonResponse({'message': 'Successfully updated user status.'})
+        except Signup.DoesNotExist:
+            return JsonResponse({'message': 'User not found.'}, status=404)
+
+    users = Signup.objects.all()
+    return render(request, 'admin_user_list.html', {'users': users})

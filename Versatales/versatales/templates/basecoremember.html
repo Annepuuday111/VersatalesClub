@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Admin Panel{% endblock %}</title>
+    <title>{% block title %}Core Panel{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -115,45 +115,11 @@
 <body>
     <div class="content">
         <div class="sidebar">
-            <h2><u>Admin Dashboard</u></h2>
+            <h2><u>Core Dashboard</u></h2>
             <br>
-            <a href="{% url 'adminhome' %}" class="sidebar-item">
+            <a href="{% url 'corehome' %}" class="sidebar-item">
                 <i class="fas fa-tachometer-alt icon"></i> Dashboard
             </a>
-            <div class="sidebar-item" id="team-toggle">
-                <i class="fas fa-users icon"></i> Add Team
-                <div class="dropdown-menu" id="team-dropdown">
-                    <a href="{% url 'addteam' %}" class="dropdown-item">Core Members</a>
-                    <a href="{% url 'addmember' %}" class="dropdown-item">Team Members</a>
-                    <a href="{% url 'viewteam' %}" class="dropdown-item">View TeamList</a>
-                </div>
-            </div>
-            <div class="sidebar-item" id="events-toggle">
-                <i class="fas fa-briefcase icon"></i> Add Events
-                <div class="dropdown-menu" id="events-dropdown">
-                    <a href="{% url 'addevent' %}" class="dropdown-item">Add Event</a>
-                    <a href="{% url 'vieweventlist' %}" class="dropdown-item">View EventList</a>
-                </div>
-            </div>
-            <a href="{% url 'userstory' %}" class="sidebar-item">
-                <i class="fa fa-book icon"></i>User Story's
-            </a>
-            <a href="{% url 'users' %}" class="sidebar-item">
-                <i class="fas fa-user icon"></i>User's
-            </a>
-            <a href="{% url 'updatemarquee' %}" class="sidebar-item">
-                <i class="fa fa-refresh icon"></i>Latest Updates
-            </a>
-            <a href="{% url 'viewqueries' %}" class="sidebar-item">
-                <i class="fas fa-users icon"></i> User Queries
-            </a>
-            <div class="sidebar-item" id="gallery-toggle">
-                <i class="fa-solid fa-image icon"></i>Gallery Handler
-                <div class="dropdown-menu" id="gallery-dropdown">
-                    <a href="{% url 'addgallery' %}" class="dropdown-item">Add Gallery</a>
-                    <a href="{% url 'viewgallery' %}" class="dropdown-item">View Gallery</a>
-                </div>
-            </div>
             <a href="{% url 'logout' %}" class="sidebar-item">
                 <i class="fas fa-sign-out-alt icon"></i> Logout
             </a>

@@ -11,7 +11,7 @@ from .models import Member
 class SignupForm(forms.ModelForm):
     class Meta:
         model = Signup
-        fields = ['name', 'email', 'username', 'password']
+        fields = ['name', 'email', 'username', 'password', 'gender', 'phone', 'location']
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
@@ -67,7 +67,7 @@ class GalleryImageForm(forms.ModelForm):
 class TeamMemberForm(forms.ModelForm):
     class Meta:
         model = TeamMember
-        fields = ['name', 'position', 'email', 'profile_picture', 'bio']
+        fields = ['name', 'position', 'email', 'phone', 'profile_picture', 'bio']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
         }
@@ -75,7 +75,7 @@ class TeamMemberForm(forms.ModelForm):
 class MemberForm(forms.ModelForm):
     class Meta:
         model = Member
-        fields = ['name', 'position', 'email', 'profile_picture', 'bio']
+        fields = ['name', 'position', 'email', 'phone', 'profile_picture', 'bio']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
         }
