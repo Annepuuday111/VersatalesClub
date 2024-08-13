@@ -162,6 +162,18 @@ def addevent(request):
 
     return render(request, 'addevent.html', {'form': form})
 
+def coreaddevent(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Event added successfully!')
+            return redirect('coreaddevent')
+    else:
+        form = EventForm()
+
+    return render(request, 'coreaddevent.html', {'form': form})
+
 def bulkupload(request):
     if request.method == 'POST' and request.FILES.get('event_file'):
         event_file = request.FILES['event_file']
@@ -387,12 +399,28 @@ def addstory(request):
 
     return render(request, 'addstory.html', {'form': form})
 
+def coreaddstory(request):
+    if request.method == 'POST':
+        form = StoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Story added successfully!')
+            form = StoryForm()
+    else:
+        form = StoryForm()
+
+    return render(request, 'coreaddstory.html', {'form': form})
+
 def viewstory(request):
     accepted_stories = Story.objects.filter(status='accepted')
     return render(request, 'viewstory.html', {'stories': accepted_stories})
 def userstory(request):
     stories = Story.objects.all()
     return render(request, 'userstory.html', {'stories': stories})
+
+def coreviewstory(request):
+    stories = Story.objects.all()
+    return render(request, 'coreviewstory.html', {'stories': stories})
 
 def updatestorystatus(request, story_id):
     if request.method == 'POST':
@@ -414,6 +442,10 @@ def updatestorystatus(request, story_id):
 def vieweventlist(request):
     events = Event.objects.all().order_by('-date')
     return render(request, 'vieweventlist.html', {'events': events})
+
+def corevieweventlist(request):
+    events = Event.objects.all().order_by('-date')
+    return render(request, 'corevieweventlist.html', {'events': events})
 
 def deleteevent(request, event_id):
     if request.method == 'POST':
@@ -497,16 +529,13 @@ def update_user_status(request):
 def delete_user(request):
     if request.method == 'POST':
         user_id = request.POST.get('user_id')
-        if user_id:
-            try:
-                user = User.objects.get(id=user_id)
-                user.delete()
-                return JsonResponse({'message': 'User deleted successfully.'})
-            except User.DoesNotExist:
-                return JsonResponse({'message': 'User not found.'}, status=404)
-        else:
-            return JsonResponse({'message': 'User ID not provided.'}, status=400)
-    return JsonResponse({'message': 'Invalid request method.'}, status=400)
+        try:
+            user = Signup.objects.get(id=user_id)
+            user.delete()
+            return JsonResponse({'message': 'User deleted successfully.'})
+        except Signup.DoesNotExist:
+            return JsonResponse({'message': 'User not found.'}, status=404)
+    return JsonResponse({'message': 'Invalid request.'}, status=400)
 
 @login_required
 def set_core_member(request):

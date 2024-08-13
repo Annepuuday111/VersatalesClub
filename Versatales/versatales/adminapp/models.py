@@ -119,17 +119,15 @@ class MarqueeContent(models.Model):
 class User(AbstractUser):
     groups = models.ManyToManyField(
         Group,
-        related_name='adminapp_user_set',  # Add related_name to avoid conflict
+        related_name='adminapp_user_set',
         blank=True,
         help_text=('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
         related_query_name='user',
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='adminapp_user_set',  # Add related_name to avoid conflict
+        related_name='adminapp_user_set',
         blank=True,
         help_text='Specific permissions for this user.',
         related_query_name='user',
     )
-
-    # Add any additional fields or methods here

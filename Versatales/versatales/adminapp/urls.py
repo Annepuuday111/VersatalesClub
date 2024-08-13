@@ -10,8 +10,6 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('knowmore/', views.knowmore, name='knowmore'),
     path('contact/', views.contact, name='contact'),
-    path('update-user-status/', views.update_user_status, name='update_user_status'),
-    path('delete-user/', views.delete_user, name='delete_user'),
 
     # Authentication and User Management
     path('login/', views.login, name='login'),
@@ -20,9 +18,11 @@ urlpatterns = [
 
     # Events Management
     path('addevent/', views.addevent, name='addevent'),
+    path('coreaddevent/', views.coreaddevent, name='coreaddevent'),
     path('bulkupload/', views.bulkupload, name='bulkupload'),
     path('viewevents/', views.viewevents, name='viewevents'),
     path('vieweventlist/', views.vieweventlist, name='vieweventlist'),
+    path('corevieweventlist/', views.corevieweventlist, name='corevieweventlist'),
     path('downloadevents/', views.downloadevents, name='downloadevents'),
     path('deleteevent/<int:event_id>/', views.deleteevent, name='deleteevent'),
 
@@ -46,8 +46,10 @@ urlpatterns = [
 
     # Stories Management
     path('addstory/', views.addstory, name='addstory'),
+    path('coreaddstory/', views.coreaddstory, name='coreaddstory'),
     path('viewstory/', views.viewstory, name='viewstory'),
     path('userstory/', views.userstory, name='userstory'),
+    path('coreviewstory/', views.coreviewstory, name='coreviewstory'),
     path('updatestorystatus/<int:story_id>/', views.updatestorystatus, name='updatestorystatus'),
 
     # Queries
@@ -55,5 +57,7 @@ urlpatterns = [
     path('deletequery/<int:query_id>/', views.deletequery, name='deletequery'),
     path('chatbot/', views.chatbot, name='chatbot'),
     path('users/', views.users, name='users'),
+    path('update-user-status/', views.update_user_status, name='update_user_status'),
+    path('delete-user/', views.delete_user, name='delete_user'),
     path('updatemarquee/', views.updatemarquee, name='updatemarquee'),
 ]

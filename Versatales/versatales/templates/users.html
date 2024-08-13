@@ -79,6 +79,15 @@
         display: flex;
         justify-content: center;
     }
+    /* Status color classes */
+    .status-core {
+        color: green;
+        font-weight: bold;
+    }
+    .status-regular {
+        color: gray;
+        font-weight: bold;
+    }
 </style>
 
 <div class="container">
@@ -107,7 +116,9 @@
                         <td>{{ user.get_gender_display }}</td>
                         <td>{{ user.phone }}</td>
                         <td>{{ user.location }}</td>
-                        <td>{{ user.is_core_member|yesno:"Core Member,Regular User" }}</td>
+                        <td class="status {% if user.is_core_member %}status-core{% else %}status-regular{% endif %}">
+                            {{ user.is_core_member|yesno:"Core Member,Regular User" }}
+                        </td>
                         <td class="btn-group">
                             {% if user.is_core_member %}
                                 <button class="btn btn-reject" onclick="updateUserStatus({{ user.id }}, 'regular')">Remove Core Member</button>
@@ -143,16 +154,18 @@
                     $('#success-message').text(response.message).fadeIn().delay(3000).fadeOut();
 
                     var row = $('#user-' + userId);
-                    var statusCell = row.find('td').eq(6); // Status cell
+                    var statusCell = row.find('td').eq(6);
 
                     if (status === 'core') {
                         row.find('.btn-core').hide();
                         row.find('.btn-reject').show();
                         statusCell.text('Core Member');
+                        statusCell.removeClass('status-regular').addClass('status-core');
                     } else {
                         row.find('.btn-core').show();
                         row.find('.btn-reject').hide();
                         statusCell.text('Regular User');
+                        statusCell.removeClass('status-core').addClass('status-regular');
                     }
                 } else {
                     alert('Failed to update user status.');

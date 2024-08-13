@@ -43,6 +43,7 @@
             display: flex;
             align-items: center;
             position: relative;
+            cursor: pointer;
         }
         .sidebar-item:hover {
             background-color: rgba(255, 255, 255, 0.3);
@@ -120,6 +121,20 @@
             <a href="{% url 'corehome' %}" class="sidebar-item">
                 <i class="fas fa-tachometer-alt icon"></i> Dashboard
             </a>
+            <div class="sidebar-item dropdown-toggle">
+                <i class="fas fa-briefcase icon"></i> Add Events
+                <div class="dropdown-menu">
+                    <a href="{% url 'coreaddevent' %}" class="dropdown-item">Add Event</a>
+                    <a href="{% url 'corevieweventlist' %}" class="dropdown-item">View EventList</a>
+                </div>
+            </div>
+            <div class="sidebar-item dropdown-toggle">
+                <i class="fa fa-book icon"></i> User Stories
+                <div class="dropdown-menu">
+                    <a href="{% url 'coreaddstory' %}" class="dropdown-item">Add Story</a>
+                    <a href="{% url 'coreviewstory' %}" class="dropdown-item">View Stories</a>
+                </div>
+            </div>
             <a href="{% url 'logout' %}" class="sidebar-item">
                 <i class="fas fa-sign-out-alt icon"></i> Logout
             </a>
@@ -133,43 +148,24 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var teamToggle = document.getElementById('team-toggle');
-            var teamDropdown = document.getElementById('team-dropdown');
+            var dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
-            teamToggle.addEventListener('click', function(event) {
-                event.stopPropagation();
-                var isVisible = teamDropdown.style.display === 'block';
-                teamDropdown.style.display = isVisible ? 'none' : 'block';
-            });
-
-            var galleryToggle = document.getElementById('gallery-toggle');
-            var galleryDropdown = document.getElementById('gallery-dropdown');
-
-            galleryToggle.addEventListener('click', function(event) {
-                event.stopPropagation();
-                var isVisible = galleryDropdown.style.display === 'block';
-                galleryDropdown.style.display = isVisible ? 'none' : 'block';
-            });
-
-            var eventsToggle = document.getElementById('events-toggle');
-            var eventsDropdown = document.getElementById('events-dropdown');
-
-            eventsToggle.addEventListener('click', function(event) {
-                event.stopPropagation();
-                var isVisible = eventsDropdown.style.display === 'block';
-                eventsDropdown.style.display = isVisible ? 'none' : 'block';
+            dropdownToggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    var dropdownMenu = this.querySelector('.dropdown-menu');
+                    var isVisible = dropdownMenu.style.display === 'block';
+                    dropdownMenu.style.display = isVisible ? 'none' : 'block';
+                });
             });
 
             document.addEventListener('click', function(event) {
-                if (!teamToggle.contains(event.target) && !teamDropdown.contains(event.target)) {
-                    teamDropdown.style.display = 'none';
-                }
-                if (!galleryToggle.contains(event.target) && !galleryDropdown.contains(event.target)) {
-                    galleryDropdown.style.display = 'none';
-                }
-                if (!eventsToggle.contains(event.target) && !eventsDropdown.contains(event.target)) {
-                    eventsDropdown.style.display = 'none';
-                }
+                dropdownToggles.forEach(function(toggle) {
+                    var dropdownMenu = toggle.querySelector('.dropdown-menu');
+                    if (!toggle.contains(event.target) && dropdownMenu.style.display === 'block') {
+                        dropdownMenu.style.display = 'none';
+                    }
+                });
             });
         });
     </script>
