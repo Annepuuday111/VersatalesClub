@@ -1,0 +1,136 @@
+{% extends 'baseadmin.html' %}
+{% load static %}
+{% block title %}Edit Member{% endblock %}
+{% block content %}
+    <style>
+        .form-heading {
+            font-size: 1.5em;
+            margin-bottom: 12px;
+            text-align: center;
+            color: #444;
+            font-family: 'Arial', sans-serif;
+            font-weight: 600;
+        }
+
+        .member-form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 16px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .member-form p {
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .member-form label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: #555;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .member-form input[type="text"],
+        .member-form input[type="email"],
+        .member-form input[type="date"],
+        .member-form textarea,
+        .member-form input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+            margin-bottom: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .member-form textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.2s;
+            font-family: 'Arial', sans-serif;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-primary:active {
+            background-color: #003d80;
+            transform: scale(0.98);
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 600px) {
+            .member-form {
+                padding: 12px;
+            }
+
+            .form-heading {
+                font-size: 1.4em;
+                margin-bottom: 8px;
+            }
+
+            .btn-primary {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+
+    <h2 class="form-heading">Edit Member</h2>
+
+    <div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <form class="member-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-primary">Save Changes</button>
+    </form>
+{% endblock %}

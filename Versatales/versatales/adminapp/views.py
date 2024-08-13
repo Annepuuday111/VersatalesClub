@@ -15,6 +15,7 @@ from .models import GalleryImage
 from .models import Signup
 from .forms import ContactForm
 from .models import Contact
+from django.urls import reverse
 from .models import TeamMember
 from .models import Member
 from .models import Event
@@ -52,7 +53,6 @@ def about(request):
 
 def knowmore(request):
     return render(request, 'knowmore.html')
-
 
 def contact(request):
     if request.method == 'POST':
@@ -96,12 +96,10 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Check fixed admin credentials
         if username == FIXED_ADMIN_USERNAME and password == FIXED_ADMIN_PASSWORD:
             request.session['is_admin'] = True
             return redirect('adminhome')
 
-        # Check for user in Signup model
         try:
             user = Signup.objects.get(username=username)
             if check_password(password, user.password):
@@ -208,6 +206,33 @@ def viewevents(request):
     events = Event.objects.all()
     return render(request, 'viewevents.html', {'events': events})
 
+
+def editevent(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('vieweventlist'))
+    else:
+        form = EventForm(instance=event)
+
+    return render(request, 'editevent.html', {'form': form, 'event': event})
+
+def coreeditevent(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('corevieweventlist'))
+    else:
+        form = EventForm(instance=event)
+
+    return render(request, 'coreeditevent.html', {'form': form, 'event': event})
+
 def downloadevents(request):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="events.xls"'
@@ -260,6 +285,18 @@ def addteam(request):
         form = TeamMemberForm()
 
     return render(request, 'addteam.html', {'form': form})
+
+def editteammember(request, id):
+    member = get_object_or_404(TeamMember, id=id)
+    if request.method == 'POST':
+        form = TeamMemberForm(request.POST, request.FILES, instance=member)
+        if form.is_valid():
+            form.save()
+            return redirect('viewteam')
+    else:
+        form = TeamMemberForm(instance=member)
+    return render(request, 'editteammember.html', {'form': form})
+
 
 def bulkteamupload(request):
     if request.method == 'POST':
@@ -329,6 +366,17 @@ def addmember(request):
         form = MemberForm()
 
     return render(request, 'addmember.html', {'form': form})
+
+def editmember(request, id):
+    member = get_object_or_404(Member, id=id)
+    if request.method == 'POST':
+        form = MemberForm(request.POST, request.FILES, instance=member)
+        if form.is_valid():
+            form.save()
+            return redirect('viewteam')
+    else:
+        form = MemberForm(instance=member)
+    return render(request, 'editmember.html', {'form': form})
 
 def bulkmemberupload(request):
     if request.method == 'POST':
