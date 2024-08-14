@@ -120,6 +120,9 @@
             <a href="{% url 'adminhome' %}" class="sidebar-item">
                 <i class="fas fa-tachometer-alt icon"></i> Dashboard
             </a>
+            <a href="{% url 'users' %}" class="sidebar-item">
+                <i class="fas fa-user icon"></i>User's
+            </a>
             <div class="sidebar-item" id="team-toggle">
                 <i class="fas fa-users icon"></i> Add Team
                 <div class="dropdown-menu" id="team-dropdown">
@@ -138,15 +141,6 @@
             <a href="{% url 'userstory' %}" class="sidebar-item">
                 <i class="fa fa-book icon"></i>User Story's
             </a>
-            <a href="{% url 'users' %}" class="sidebar-item">
-                <i class="fas fa-user icon"></i>User's
-            </a>
-            <a href="{% url 'updatemarquee' %}" class="sidebar-item">
-                <i class="fa fa-refresh icon"></i>Latest Updates
-            </a>
-            <a href="{% url 'viewqueries' %}" class="sidebar-item">
-                <i class="fas fa-users icon"></i> User Queries
-            </a>
             <div class="sidebar-item" id="gallery-toggle">
                 <i class="fa-solid fa-image icon"></i>Gallery Handler
                 <div class="dropdown-menu" id="gallery-dropdown">
@@ -154,6 +148,18 @@
                     <a href="{% url 'viewgallery' %}" class="dropdown-item">View Gallery</a>
                 </div>
             </div>
+            <a href="{% url 'updatemarquee' %}" class="sidebar-item">
+                <i class="fa fa-refresh icon"></i>Latest Updates
+            </a>
+            <a href="{% url 'viewqueries' %}" class="sidebar-item">
+                <i class="fas fa-users icon"></i> User Queries
+            </a>
+            <a href="#chatwithmemebr" class="sidebar-item">
+                <i class="fas fa-comments icon"></i>Team Members Queries
+            </a>
+            <a href="#chatwithadmin" class="sidebar-item">
+                <i class="fas fa-comments icon"></i>Core Members Queries
+            </a>
             <a href="{% url 'logout' %}" class="sidebar-item">
                 <i class="fas fa-sign-out-alt icon"></i> Logout
             </a>

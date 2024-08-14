@@ -338,7 +338,7 @@ def downloadteammembers(request):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['Name', 'Position', 'Email', 'Bio', 'Profile Picture']
+    columns = ['Name', 'Position', 'Email', 'Phone', 'Bio', 'Profile Picture']
 
     for col_num in range(len(columns)):
         ws.write(0, col_num, columns[col_num], font_style)
@@ -418,7 +418,7 @@ def downloadmembers(request):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['Name', 'Position', 'Email', 'Bio', 'Profile Picture']
+    columns = ['Name', 'Position', 'Email', 'Phone', 'Bio', 'Profile Picture']
 
     for col_num in range(len(columns)):
         ws.write(0, col_num, columns[col_num], font_style)
@@ -506,6 +506,11 @@ def viewteam(request):
     team_members = TeamMember.objects.all()
     members = Member.objects.all()
     return render(request, 'viewteam.html', {'team_members': team_members,'members': members})
+
+def coreviewteam(request):
+    team_members = TeamMember.objects.all()
+    members = Member.objects.all()
+    return render(request, 'coreviewteam.html', {'team_members': team_members,'members': members})
 
 def deleteteammember(request, member_id):
     if request.method == 'POST':

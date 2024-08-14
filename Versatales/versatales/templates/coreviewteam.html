@@ -1,0 +1,212 @@
+{% extends 'basecoremember.html' %}
+{% load static %}
+{% block title %}View Team and Members{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .alert {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+    .btn-download {
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        color: white;
+        text-align: center;
+        display: inline-block;
+        text-decoration: none;
+        background-color: #28a745;
+    }
+    .btn-download:hover {
+        background-color: #218838;
+    }
+    .table {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #dee2e6;
+        padding: .75rem;
+        vertical-align: top;
+        text-align: center;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .gallery-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+    .section-title {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 24px;
+    }
+    .button-container {
+        text-align: right;
+        margin-bottom: 20px;
+    }
+    .fa {
+        cursor: pointer;
+        margin: 0 10px;
+    }
+    .fa-lg {
+        font-size: 1em;
+    }
+    .fa-2x {
+        font-size: 1.4em;
+    }
+    .fa-edit {
+        color: #007bff;
+    }
+    .fa-edit:hover {
+        color: #0056b3;
+    }
+    .fa-trash {
+        color: #dc3545;
+    }
+    .fa-trash:hover {
+        color: #c82333;
+    }
+</style>
+
+<div class="container">
+    <h2 class="text-center">Core Team & Team Members Records</h2>
+
+    <div id="success-message" class="alert alert-success" style="display: none;"></div>
+
+    <div id="core-team-section">
+        <h3 class="section-title">Core Team Members</h3>
+        {% if team_members %}
+            <div class="button-container">
+                <a href="{% url 'downloadteammembers' %}" class="btn btn-download">Download Core Team</a>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Profile Picture</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Email</th>
+                        <th>Phone No</th>
+                        <th>Bio</th>
+                    </tr>
+                </thead>
+                <tbody id="team-table-body">
+                    {% for member in team_members %}
+                        <tr id="team-member-{{ member.id }}">
+                            <td>
+                                {% if member.profile_picture %}
+                                    <img src="{{ member.profile_picture.url }}" alt="Profile Picture" class="gallery-image"/>
+                                {% else %}
+                                    <img src="{% static 'default-profile-picture.png' %}" alt="Default Profile Picture" class="gallery-image"/>
+                                {% endif %}
+                            </td>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.position }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.phone }}</td>
+                            <td>{{ member.bio }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No team members found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center">No team members found.</p>
+        {% endif %}
+    </div>
+
+    <div id="members-section">
+        <h3 class="section-title">Team Members</h3>
+        {% if members %}
+            <div class="button-container">
+                <a href="{% url 'downloadmembers' %}" class="btn btn-download">Download Members</a>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Profile Picture</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Email</th>
+                        <th>Phone No</th>
+                        <th>Bio</th>
+                    </tr>
+                </thead>
+                <tbody id="members-table-body">
+                    {% for member in members %}
+                        <tr id="member-{{ member.id }}">
+                            <td>
+                                {% if member.profile_picture %}
+                                    <img src="{{ member.profile_picture.url }}" alt="Profile Picture" class="gallery-image"/>
+                                {% else %}
+                                    <img src="{% static 'default-profile-picture.png' %}" alt="Default Profile Picture" class="gallery-image"/>
+                                {% endif %}
+                            </td>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.position }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.phone }}</td>
+                            <td>{{ member.bio }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">No members found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-center">No members found.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function toggleButtonVisibility() {
+            if ($('#team-table-body tr').length > 0) {
+                $('#core-team-buttons').show();
+            } else {
+                $('#core-team-buttons').hide();
+            }
+
+            if ($('#members-table-body tr').length > 0) {
+                $('#members-buttons').show();
+            } else {
+                $('#members-buttons').hide();
+            }
+        }
+
+        toggleButtonVisibility();
+
+    });
+</script>
+{% endblock %}

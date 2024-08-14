@@ -121,6 +121,9 @@
             <a href="{% url 'corehome' %}" class="sidebar-item">
                 <i class="fas fa-tachometer-alt icon"></i> Dashboard
             </a>
+            <a href="{% url 'coreviewteam' %}" class="sidebar-item">
+                <i class="fas fa-users icon"></i> View Team
+            </a>
             <div class="sidebar-item dropdown-toggle">
                 <i class="fas fa-briefcase icon"></i> Add Events
                 <div class="dropdown-menu">
@@ -135,6 +138,12 @@
                     <a href="{% url 'coreviewstory' %}" class="dropdown-item">View Stories</a>
                 </div>
             </div>
+            <a href="#chatwithmemebr" class="sidebar-item">
+                <i class="fas fa-comments icon"></i> Chat With Team Members
+            </a>
+            <a href="#chatwithadmin" class="sidebar-item">
+                <i class="fas fa-comment icon"></i> Chat With Admin
+            </a>
             <a href="{% url 'logout' %}" class="sidebar-item">
                 <i class="fas fa-sign-out-alt icon"></i> Logout
             </a>
